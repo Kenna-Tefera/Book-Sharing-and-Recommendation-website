@@ -58,8 +58,12 @@ router.route("/books/:id").get(getLoggedinUser, async (req, res) => {
     if (foundBook === null) {
       return res.status(404).json({error: "Book not found"}); // NEED TO RENDER 404
     }
+
+    // Get reviews associated with the book
+    const reviews = await Review.find({ bookId: req.params.id });
     return res.status(200).json({
       book: foundBook,
+      reviews: reviews,
       permission: isForbidden
     });
 

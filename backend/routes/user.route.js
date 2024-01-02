@@ -112,10 +112,10 @@ router.route("/login").post((req, res, next) => {
   });
 });
 
-// Get user profile
+// Get user profile along with user's reviews
 router.route(["/profile/:id", "/edit/:id"]).get(async (req, res) => {
   try {
-    const foundUser = await User.findById(req.params.id);
+    const foundUser = await User.findById(req.params.id).populate('reviews');
     if (!foundUser) {
       return res.status(404).json({error: "User not found"});
     }
