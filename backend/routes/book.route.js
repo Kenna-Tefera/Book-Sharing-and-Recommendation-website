@@ -91,15 +91,40 @@ router.route("/users/:id").get(async (req, res) => {
   }
 });
 
+// get all users 
+router.route("/users").get(async (req, res) => {
+  try {
+    const allUsers = await User.find();
+    return res.status(200).json(allUsers);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+
+
 // POST book to loggedinUser account
 // Requires authentication. Can only be performed by loggedinUser
 router.route("/books/add").post(getLoggedinUser, upload.single("image"), async(req, res) => {
 
+  // BOOK CATAGORIZATION
+  // Assuming genre is the primary category
+  const { name, author, description, genre } = req.body;
+  const categories = [genre]; 
+
+  
   const newBook = new Book({
-    name: req.body.name,
-    author: req.body.author,
-    description: req.body.description,
-    genre: req.body.genre,
+    // name: req.body.name,
+    // author: req.body.author,
+    // description: req.body.description,
+    // genre: req.body.genre,
+    
+    // after adding book catagorization
+    name,
+    author,
+    description,
+    genre,
+    categories,
     userId: req.body.userId,
     image: {
       data: req.file.buffer, // Buffer data in memory

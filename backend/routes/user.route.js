@@ -151,4 +151,29 @@ router.route("/edit/:id").put(getLoggedinUser, upload.single("image"), async (re
 
 });
 
+// Endpoint to get user notifications
+router.get("/notifications/:userId", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    res.json(user.notifications);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint to mark a notification as read
+router.put("/notifications/:userId/:notificationId", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    const notification = user.notifications.id(req.params.notificationId);
+    
+    // Assuming you want to mark as read
+    notification.read = true;
+
+    await user.save();
+    res.json({ message: "Notification marked as read" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 module.exports = router;
