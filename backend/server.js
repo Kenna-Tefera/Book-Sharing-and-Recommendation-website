@@ -9,6 +9,7 @@ const keys = require("./config/keys");
 // Express route
 const bookRoute = require("./routes/book.route");
 const userRoute = require("./routes/user.route");
+const reviewRoute = require("./routes/review.route");
 
 const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
@@ -31,6 +32,7 @@ require("./config/passport")(passport);
 // Routes
 app.use("/", bookRoute);
 app.use("/users", userRoute);
+app.use("/reviews", reviewRoute);
 
 // Port
 const port = process.env.PORT || 4000;

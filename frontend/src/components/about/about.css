@@ -1,0 +1,43 @@
+.about-page {
+  padding: 20px;
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about-image {
+  /* Add styles for the image container */
+}
+
+.about-text {
+  max-width: 800px;
+  text-align: left;
+}
+
+.about-text h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.about-text h2 {
+  font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.about-text ul {
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+.about-text ul li {
+  margin-bottom: 10px;
+}
+
+.about-text p {
+  font-size: 16px;
+  line-height: 1.5;
+}

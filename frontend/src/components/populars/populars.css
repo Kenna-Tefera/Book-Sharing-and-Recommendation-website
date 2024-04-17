@@ -1,0 +1,47 @@
+
+.box{
+    height:300px;
+    background-color: #f4f2e9;
+    border-bottom: 50px solid #cccab4;
+
+}
+
+.box1{
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+
+.box2{
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+.gallery{
+    margin-left: 30px;
+}
+
+
+.label .title{
+    position: absolute;
+    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 20px 0 5px 0;
+    font-size: 18px;
+}
+
+
+.explore-icon {
+    vertical-align: middle;
+    font-size: 40px;
+    color:#53352d;
+    animation: blinker 1s linear infinite;
+    position: absolute;
+    top:40%;
+    left: 85%;
+  }
+
+  
+  @keyframes blinker {
+    50% {
+      color: #a27979;
+    }
+  }
