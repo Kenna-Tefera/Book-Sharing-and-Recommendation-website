@@ -6,6 +6,7 @@ import Login from "./pages/login";
 import Navbar from "./components/shared/navbar";
 import ForgotPassword from './components/ForgotPassword';
 import Home from './pages/home';
+import CreateBookPage from './pages/createBookPage';
 
 const App = () => {
   // Simulating authentication state
@@ -41,6 +42,8 @@ const App = () => {
           path="/home"
           element={isAuthenticated ? <Home /> : <Navigate to="/" />}
         />
+        <Route path="/createBookPage" element={<CreateBookPage />} />
+
       </Routes>
     </Router>
   );
