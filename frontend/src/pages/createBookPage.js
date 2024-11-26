@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import Navbar from '../components/shared/navbar'; // Import Navbar component
 import Sidebar from '../components/sidebar/sidebar'; // Import Sidebar component
-
 
 const CreateBookPage = () => {
   const [formData, setFormData] = useState({
@@ -9,13 +7,18 @@ const CreateBookPage = () => {
     author: '',
     genre: '',
     description: '',
+    file: null, // State for file upload
   });
 
   const [isChecked, setIsChecked] = useState(false);
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
+    const { id, value, type, files } = e.target;
+    if (type === 'file') {
+      setFormData({ ...formData, [id]: files[0] }); // Set file to state
+    } else {
+      setFormData({ ...formData, [id]: value });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -31,7 +34,13 @@ const CreateBookPage = () => {
       return;
     }
 
+    if (!formData.file) {
+      alert('Please upload a file!');
+      return;
+    }
+
     console.log('Book submitted:', formData);
+    // You can now process the file upload here
   };
 
   return (
@@ -40,9 +49,6 @@ const CreateBookPage = () => {
       <Sidebar />
 
       <div className="flex-1 bg-gray-100">
-        {/* Navbar */}
-        {/* <Navbar /> */}
-
         <div className="p-6">
           <h2 className="text-3xl font-bold text-center mb-6">Create a New Book</h2>
 
@@ -108,6 +114,19 @@ const CreateBookPage = () => {
               />
             </div>
 
+            {/* File Upload */}
+            <div className="mb-4">
+              <label htmlFor="file" className="block text-sm font-medium text-gray-700">
+                Book Cover (Optional)
+              </label>
+              <input
+                id="file"
+                type="file"
+                className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                onChange={handleChange}
+              />
+            </div>
+
             {/* Terms and Conditions */}
             <div className="mb-4">
               <label className="inline-flex items-center">
@@ -120,9 +139,7 @@ const CreateBookPage = () => {
                 />
                 <span className="ml-2 text-gray-500">
                   I agree to the{' '}
-                  <a href="#"
-                    className="text-orange-600 underline decoration-orange-600"
-                  >
+                  <a href="#" className="text-orange-600 underline decoration-orange-600">
                     Terms and Conditions
                   </a>
                 </span>

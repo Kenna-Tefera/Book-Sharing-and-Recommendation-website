@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   const [isBooksOpen, setIsBooksOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // State to manage sidebar visibility
 
   const menuItems = [
     { label: 'Home', icon: '🏠', link: '/' },
@@ -12,7 +13,15 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-64 h-screen bg-black text-white flex flex-col">
+    <div className={`w-64 h-screen bg-black text-white flex flex-col transition-all ${isSidebarOpen ? 'block' : 'hidden'}`}>
+      {/* Hamburger Icon to toggle Sidebar */}
+      <button
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className="p-4 text-white text-3xl fixed top-4 left-4 z-50"
+      >
+        ☰ {/* This is the hamburger icon */}
+      </button>
+
       {/* Profile Section */}
       <div className="p-6 flex flex-col items-center">
         <img
