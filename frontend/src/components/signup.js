@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -8,7 +8,8 @@ const Signup = () => {
     password: '',
   });
 
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(false); // State for checkbox
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -24,11 +25,15 @@ const Signup = () => {
     }
 
     if (!isChecked) {
-      alert('Please accept the Terms and Conditions!');
+      alert('You must agree to the Terms and Conditions!');
       return;
     }
 
+    // Here you can add your API call to handle the signup logic
     console.log('Form submitted:', formData);
+
+    // After successful signup, redirect to the login page
+    navigate('/login'); // Redirect to the login page
   };
 
   return (
@@ -99,12 +104,9 @@ const Signup = () => {
                 />
                 <span className="ml-2 text-gray-500">
                   I agree to{' '}
-                  <a
-                    href="#"
-                    className="text-orange-600 underline decoration-orange-600"
-                  >
+                  <Link to="/terms-and-conditions" className="text-orange-600 underline">
                     Terms and Conditions
-                  </a>
+                  </Link>
                 </span>
               </label>
             </div>
@@ -112,8 +114,9 @@ const Signup = () => {
             <div className="flex items-center justify-center">
               <button
                 id="signupButton"
-                className="text-white font-bold py-2 px-4 rounded-3xl w-full bg-[#003377] hover:bg-blue-600 transition-colors"
+                className={`text-white font-bold py-2 px-4 rounded-3xl w-full ${isChecked ? 'bg-[#003377]' : 'bg-gray-400 cursor-not-allowed'} hover:bg-blue-600 transition-colors`}
                 type="submit"
+                disabled={!isChecked} // Disable button if checkbox is not checked
               >
                 Sign Up
               </button>
@@ -122,9 +125,9 @@ const Signup = () => {
 
           <p className="text-center text-gray-950 mt-4">
             Already have an account?{' '}
-            <a href="/login" className="text-[#FD7606] underline">
+            <Link to="/login" className="text-[#FD7606] underline">
               Login
-            </a>
+            </Link>
           </p>
         </div>
       </div>

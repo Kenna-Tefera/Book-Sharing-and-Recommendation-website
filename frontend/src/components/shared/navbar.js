@@ -1,6 +1,7 @@
 // src/components/Navbar.js
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import logo from '../../assets/logo.svg'; // Import SVG logo
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,15 +11,16 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-green-900 p-4 shadow-md">
+    <nav className="bg-black p-4 shadow-md"> {/* Ensuring black background */}
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo or Brand Name */}
-        <Link to="/" className="text-white">
+        <Link to="/" className="flex items-center">
           <img 
-            src="../assets/img/logo.jpg" // Replace with your logo image path
+            src={logo} // Use the imported SVG
             alt="MyApp Logo"
-            className="h-10" // You can adjust the size of the logo here
+            className="h-10" // Adjust the size of the logo here
           />
+          <span className="text-white ml-2 text-xl font-bold">Book Lovers</span>
         </Link>
 
         {/* Desktop Menu */}
@@ -60,7 +62,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         <div className={`${isOpen ? 'block' : 'hidden'} md:hidden`}>
-          <div className="flex flex-col space-y-4 p-4 bg-blue-600">
+          <div className="flex flex-col space-y-4 p-4 bg-black"> {/* Black background */}
             <Link to="/" className="text-white hover:text-gray-300">
               Home
             </Link>
