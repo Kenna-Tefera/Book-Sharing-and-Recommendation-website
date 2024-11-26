@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-import Signup from "./components/signup";
-import Login from "./components/login";
+import Signup from "./pages/signup";
+import Login from "./pages/login";
 import Navbar from "./components/shared/navbar";
 import ForgotPassword from './components/ForgotPassword';
-import Home from './components/home/home';
+import Home from './pages/home';
 
 const App = () => {
   // Simulating authentication state
