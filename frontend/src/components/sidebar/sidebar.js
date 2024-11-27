@@ -8,8 +8,11 @@ const Sidebar = () => {
   const menuItems = [
     { label: 'Home', icon: '🏠', link: '/' },
     { label: 'Categories', icon: '📂', link: '/categories' },
-    { label: 'Favorites', icon: '❤️', link: '/favorites' },
+    { label: 'Favorites', icon: '❤️', link: '/profile/favorites' },
     { label: 'Settings', icon: '⚙️', link: '/settings' },
+    { label: 'Profile', icon: '👤', link: '/profile' },
+
+
   ];
 
   return (
@@ -69,6 +72,55 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <Link
+                    to="/updateBookPage"
+                    className="flex items-center px-4 py-2 hover:bg-gray-600 transition-all"
+                  >
+                    Update Book
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/detailBookPage"
+                    className="flex items-center px-4 py-2 hover:bg-gray-600 transition-all"
+                  >
+                    Detail of Book
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/my-books"
+                    className="flex items-center px-4 py-2 hover:bg-gray-600 transition-all"
+                  >
+                    My Books
+                  </Link>
+                </li>
+                <li>
+          <Link to="/profile/favorites" className="text-white text-lg hover:text-blue-500">Favorites</Link>
+        </li>
+              </ul>
+            )}
+          </li>
+          {/* Dropdown for profile */}
+          {/* <li>
+            <button
+              onClick={() => setIsProfileOpen(!isProfileOpen)}
+              className="flex items-center px-4 py-2 w-full text-left hover:bg-gray-700 transition-all"
+            >
+              <span className="mr-3">📚</span> Books
+              <span className="ml-auto">{isProfileOpen ? '▼' : '►'}</span>
+            </button>
+            {isProfileOpen && (
+              <ul className="pl-8 space-y-2 mt-2">
+                <li>
+                  <Link
+                    to="/profilePage"
+                    className="flex items-center px-4 py-2 hover:bg-gray-600 transition-all"
+                  >
+                    Create Book
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     to="/my-books"
                     className="flex items-center px-4 py-2 hover:bg-gray-600 transition-all"
                   >
@@ -77,7 +129,7 @@ const Sidebar = () => {
                 </li>
               </ul>
             )}
-          </li>
+          </li> */}
         </ul>
       </nav>
 
