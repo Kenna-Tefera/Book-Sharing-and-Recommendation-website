@@ -11,6 +11,10 @@ const ProfilePage = () => {
     { id: 1, title: 'The Great Adventure', description: 'A thrilling tale of adventure.' },
     { id: 2, title: 'Mystery in the Dark', description: 'A gripping mystery novel.' },
   ]);
+  const [favorites, setFavorites] = useState([
+    { id: 1, title: 'The Great Adventure', description: 'A thrilling tale of adventure.' },
+    { id: 2, title: 'Mystery in the Dark', description: 'A gripping mystery novel.' },
+  ]);
   const [profilePicture, setProfilePicture] = useState('https://via.placeholder.com/100'); // Default profile picture
 
   const handleEditAboutMe = () => {
@@ -75,6 +79,14 @@ const ProfilePage = () => {
               </li>
               <li>
                 <button
+                  className={`text-xl ${activeTab === 'favorites' ? 'text-blue-500' : 'text-gray-700'} hover:text-blue-500`}
+                  onClick={() => setActiveTab('favorites')}
+                >
+                  Favorites
+                </button>
+              </li>
+              <li>
+                <button
                   className={`text-xl ${activeTab === 'myBooks' ? 'text-blue-500' : 'text-gray-700'} hover:text-blue-500`}
                   onClick={() => setActiveTab('myBooks')}
                 >
@@ -111,6 +123,24 @@ const ProfilePage = () => {
                   <button onClick={handleEditAboutMe} className="bg-yellow-500 text-white p-2 rounded mt-4">Edit</button>
                 </div>
               )}
+            </section>
+          )}
+
+          {activeTab === 'favorites' && (
+            <section id="favorites" className="mb-8">
+              <h2 className="text-2xl mb-4">Favorites</h2>
+              <ul>
+                {favorites.map((book) => (
+                  <li key={book.id} className="mb-4 p-4 bg-gray-100 rounded">
+                    <h3 className="text-xl font-semibold">{book.title}</h3>
+                    <p>{book.description}</p>
+                    <div className="mt-2">
+                      <button className="bg-green-500 text-white p-2 rounded mr-2">View</button>
+                      <button className="bg-blue-500 text-white p-2 rounded">Edit</button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </section>
           )}
 
