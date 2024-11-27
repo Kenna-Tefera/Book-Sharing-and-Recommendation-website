@@ -1,10 +1,9 @@
 const User = require("../model/User");
 const jwt = require("jsonwebtoken");
-const keys = require("../config/keys"); // Import the keys file
+const keys = require("../config/keys");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
-
 
 // Register
 exports.registerUser = async (req, res) => {
