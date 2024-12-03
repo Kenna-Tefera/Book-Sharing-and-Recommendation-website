@@ -10,6 +10,9 @@ import CreateBookPage from './pages/createBookPage';
 import ProfilePage from './pages/profile';
 import CreateGroupPage from './pages/CreateGroupPage';
 import GroupChatPage from './pages/GroupChatPage';
+import ErrorBoundary from './components/ErrorBoundary';
+import Error404 from './pages/Error404';
+import Error500 from './pages/Error500';
 
 const App = () => {
   // Simulating authentication state
@@ -22,6 +25,7 @@ const App = () => {
 
   return (
     <Router>
+      <ErrorBoundary>
       {isAuthenticated && <Navbar />} {/* Render Navbar only if authenticated */}
 
       <Routes>
@@ -47,11 +51,15 @@ const App = () => {
         />
         <Route path="/createBookPage" element={<CreateBookPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/error/404" component={Error404} />
+        <Route path="/error/500" component={Error500} />
+        <Route component={Error404} /> {/* Catch-all for undefined routes */}
         {/* <Route path="/profile/favorites" element={<ProfilePage />} /> */}
         <Route path="/CreateGroupPage" element={<CreateGroupPage />} />
         <Route path="/GroupChatPage" element={<GroupChatPage />} />
 
       </Routes>
+      </ErrorBoundary>
     </Router>
   );
 }

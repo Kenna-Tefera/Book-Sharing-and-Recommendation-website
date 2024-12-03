@@ -22,7 +22,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className={`h-screen bg-black text-white transition-all ${isSidebarOpen ? 'w-64' : 'w-16'}`}>
+    <div className={`h-screen bg-black text-white transition-all ${isSidebarOpen ? 'w-100' : 'w-100'}`}>
       {/* Hamburger Button */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}

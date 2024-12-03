@@ -44,7 +44,7 @@ const CreateBookPage = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       {/* Sidebar */}
       <Sidebar />
 
