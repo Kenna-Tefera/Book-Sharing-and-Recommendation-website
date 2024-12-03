@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Sidebar from '../components/sidebar/sidebar';
 
 const CreateGroupPage = () => {
   const [groupName, setGroupName] = useState('');
@@ -30,37 +31,51 @@ const CreateGroupPage = () => {
   };
 
   return (
-    <div className="p-8">
-      <h2 className="text-2xl font-semibold mb-4">Create New Group</h2>
-      <input
-        type="text"
-        placeholder="Group Name"
-        value={groupName}
-        onChange={(e) => setGroupName(e.target.value)}
-        className="w-full p-2 border mb-4 rounded"
-      />
-      <h3 className="text-xl mb-2">Select Members:</h3>
-      <ul className="mb-4">
-        {allMembers.map((member) => (
-          <li key={member.id} className="mb-2 flex items-center">
-            <input
-              type="checkbox"
-              id={`member-${member.id}`}
-              checked={selectedMembers.includes(member)}
-              onChange={() => toggleMemberSelection(member)}
-            />
-            <label htmlFor={`member-${member.id}`} className="ml-2">
-              {member.name}
-            </label>
-          </li>
-        ))}
-      </ul>
-      <button
-        onClick={handleCreateGroup}
-        className="bg-blue-500 text-white p-2 rounded"
-      >
-        Create Group
-      </button>
+    <div className="flex h-screen">
+      <Sidebar />
+      <div className="flex-1 p-8 overflow-y-auto">
+        <h2 className="text-3xl font-semibold mb-6">Create New Group</h2>
+        <div className="mb-6">
+          <label htmlFor="groupName" className="block text-xl font-medium mb-2">
+            Group Name
+          </label>
+          <input
+            type="text"
+            id="groupName"
+            placeholder="Enter Group Name"
+            value={groupName}
+            onChange={(e) => setGroupName(e.target.value)}
+            className="w-full p-3 border rounded-md shadow-md"
+          />
+        </div>
+
+        <div className="mb-6">
+          <h3 className="text-2xl font-medium mb-4">Select Members</h3>
+          <ul>
+            {allMembers.map((member) => (
+              <li key={member.id} className="mb-3 flex items-center">
+                <input
+                  type="checkbox"
+                  id={`member-${member.id}`}
+                  checked={selectedMembers.includes(member)}
+                  onChange={() => toggleMemberSelection(member)}
+                  className="mr-3"
+                />
+                <label htmlFor={`member-${member.id}`} className="text-lg">
+                  {member.name}
+                </label>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <button
+          onClick={handleCreateGroup}
+          className="w-full bg-blue-600 text-white py-3 rounded-md shadow-md hover:bg-blue-700 transition"
+        >
+          Create Group
+        </button>
+      </div>
     </div>
   );
 };
