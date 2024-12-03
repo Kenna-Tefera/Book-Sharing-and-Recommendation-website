@@ -1,17 +1,17 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { body, validationResult } = require('express-validator');
-const Review = require('../model/Review');
-const { getLoggedinUser } = require('../middleware/user');
+const { body, validationResult } = require("express-validator");
+const Review = require("../model/Review");
+const { getLoggedinUser } = require("../middleware/user");
 
 // Add a new review with validation
 router.post(
-  '/',
+  "/",
   getLoggedinUser,
   [
-    body('bookId').isMongoId().notEmpty(),
-    body('rating').isInt({ min: 1, max: 5 }),
-    body('comment').isString().notEmpty(),
+    body("bookId").isMongoId().notEmpty(),
+    body("rating").isInt({ min: 1, max: 5 }),
+    body("comment").isString().notEmpty(),
   ],
   async (req, res) => {
     try {
@@ -33,7 +33,7 @@ router.post(
 );
 
 // Get all reviews
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const reviews = await Review.find();
     res.json(reviews);
