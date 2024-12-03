@@ -8,6 +8,8 @@ import ForgotPassword from './components/ForgotPassword';
 import Home from './pages/home';
 import CreateBookPage from './pages/createBookPage';
 import ProfilePage from './pages/profile';
+import CreateGroupPage from './pages/CreateGroupPage';
+import GroupChatPage from './pages/GroupChatPage';
 
 const App = () => {
   // Simulating authentication state
@@ -46,6 +48,8 @@ const App = () => {
         <Route path="/createBookPage" element={<CreateBookPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         {/* <Route path="/profile/favorites" element={<ProfilePage />} /> */}
+        <Route path="/CreateGroupPage" element={<CreateGroupPage />} />
+        <Route path="/GroupChatPage" element={<GroupChatPage />} />
 
       </Routes>
     </Router>
