@@ -15,11 +15,10 @@ import Error404 from './pages/Error404';
 import Error500 from './pages/Error500';
 
 const App = () => {
-  // Simulating authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+
   const handleLogin = () => {
-    // Simulate user authentication
     setIsAuthenticated(true);
   };
 
@@ -49,6 +48,7 @@ const App = () => {
           path="/home"
           element={isAuthenticated ? <Home /> : <Navigate to="/" />}
         />
+        
         <Route path="/createBookPage" element={<CreateBookPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/error/404" component={Error404} />

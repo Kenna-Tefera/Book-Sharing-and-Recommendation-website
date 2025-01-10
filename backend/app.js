@@ -1,15 +1,24 @@
-// import express from 'express';
-// import mongoose from 'mongoose'
-
-// const app = express();
 
 
-// mongoose
-// .connect('mongodb+srv://annatefera3:WDkvzpFs0lCY17sY@cluster1.wbt87ht.mongodb.net/')
-// .then(() => app.listen(5000))
-// .then(() =>
-// console.log("Server is running on port 5000"))
-// .catch((err) => console.log(err));
+// const express = require("express")
+// const  bodyParser = require("body-parser");
+// const cors = require("cors")
+// const dotenv = require("dotenv")
+// // const userRouter = require("./routes/userroute.js")
+// const connectDB = require("./db");
+// const app = express()
+// const router = express.Router()
 
-// //WDkvzpFs0lCY17sY
+// dotenv.config();
+// const port = process.env.PORT
+// app.use(bodyParser.json());
+// app.use(cors());
+
+// // app.use("/user", userRouter);
+
+// connectDB();
+// app.listen(port,()=>
+// {
+//     console.log(`backend is running on port  ${port}`)
+// })
 

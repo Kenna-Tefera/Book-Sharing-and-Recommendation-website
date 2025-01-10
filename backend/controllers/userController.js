@@ -5,42 +5,105 @@ const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
+// // Register
+// exports.registerUser = async (req, res) => {
+//   const { fullName, email, password } = req.body;
+//   try {
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser)
+//       return res.status(400).json({ message: "Email already registered" });
+
+//     const user = new User({ fullName, email, password });
+//     await user.save();
+//     res.status(201).json({ message: "User registered successfully" });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
+
+// // Login
+// exports.loginUser = async (req, res) => {
+//   const { email, password } = req.body;
+//   try {
+//     const user = await User.findOne({ email });
+//     if (!user) return res.status(404).json({ message: "User not found" });
+
+//     const isMatch = await user.comparePassword(password);
+//     if (!isMatch)
+//       return res.status(400).json({ message: "Invalid credentials" });
+
+//     // Use the secret key from keys.js
+//     const token = jwt.sign({ id: user._id }, keys.secretOrKey, {
+//       expiresIn: "1h",
+//     });
+//     res.status(200).json({ token, user });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
+  
+
 // Register
 exports.registerUser = async (req, res) => {
   const { fullName, email, password } = req.body;
-  try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser)
-      return res.status(400).json({ message: "Email already registered" });
 
-    const user = new User({ fullName, email, password });
+  // Validate input
+  if (!validator.isEmail(email)) {
+    return res.status(400).json({ message: "Invalid email format" });
+  }
+  if (!password || password.length < 6) {
+    return res.status(400).json({ message: "Password must be at least 6 characters long" });
+  }
+
+  try {
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Save user to the database
+    const user = new User({ fullName, email, password: hashedPassword });
     await user.save();
     res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 // Login
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
+
   try {
+    // Check if user exists
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch)
+    // Validate password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
+    }
 
-    // Use the secret key from keys.js
-    const token = jwt.sign({ id: user._id }, keys.secretOrKey, {
+    // Generate JWT token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res.status(200).json({ token, user });
+
+    res.status(200).json({ token, user: { id: user._id, fullName: user.fullName, email: user.email } });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
 
 // Get Profile
 exports.getUserProfile = async (req, res) => {
