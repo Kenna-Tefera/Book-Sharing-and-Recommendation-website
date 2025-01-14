@@ -36,6 +36,30 @@ const Login= async(req,res)=>{
     }
 }
 
+const getAllUsers=async(req,res)=>{
+    try{
+         const users= await User.find().populate()
+         if(!users) return res.status(400).json('failed to fetch')
+         res.status(200).json(users)  
+    }catch(err){
+        res.status(500).json(err.message)
+    }
+}
+
+const getOneUser=async(req,res)=>{
+    try{
+        const userId= req.params.userId
+        const user= await User.findById(userId)
+        if(!user) return res.status(400).json('failed to fetch')
+        res.status(200).json(user)  
+    
+    }catch(err){
+        res.status(500).json(err.message)
+
+    }
+}
+
+
 const UpdateProfile= async(req,res)=>{
     try{
         const inputs= req.body
@@ -66,4 +90,4 @@ const DeleteProfile=async(req,res)=>{
 }
 
 
-module.exports={Signup,Login,UpdateProfile,DeleteProfile}
+module.exports={Signup,Login,UpdateProfile,DeleteProfile,getAllUsers,getOneUser}
