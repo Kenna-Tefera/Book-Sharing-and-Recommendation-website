@@ -3,6 +3,7 @@ const express=require('express')
 const app=express()
 const User=require('../model/user')
 const bcrypt=require('bcrypt')
+const jwt=require('jsonwebtoken')
 
 const Signup= async(req,res)=>{
      try{
@@ -13,7 +14,8 @@ const Signup= async(req,res)=>{
         const hashedPassword= await bcrypt.hash(password,salt)
         const newUser= await User.create({email,fullname,password:hashedPassword})
         if (!newUser) return res.status(400).json('failed to create new user')
-         res.status(200).json(newUser)   
+        const token= jwt.sign({id:newUser._id, email:newUser.email},'book',{expiresIn:'30d'})    
+         res.status(200).json({msg:'registerd',newUser,token})   
      }catch(err){
          res.status(500).json(err)
      }
@@ -26,7 +28,8 @@ const Login= async(req,res)=>{
         if(!user) return res.status(400).json('user not found')
         const passwordMatch= await bcrypt.compare(password,user.password)   
         if(!passwordMatch) return res.status(400).json('email or password not correctt')
-        res.status(200).json(user)
+        const token= jwt.sign({id:user._id, email:user.email},'book',{expiresIn:'30d'})    
+        res.status(200).json({msg:'logedIn',user,token})  
 
     }catch(err){
         res.status(500).json(err.message)
