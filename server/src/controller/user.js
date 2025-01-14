@@ -1,0 +1,36 @@
+
+const express=require('express')
+const app=express()
+const User=require('../model/user')
+const bcrypt=require('bcrypt')
+
+const Signup= async(req,res)=>{
+     try{
+        const {fullname,email,password}= req.body
+        const isUserExist= await User.findOne({email:email})
+        if(isUserExist) return res.status(400).json('user aleardy exist')
+        const salt=   await bcrypt.genSalt(10)
+        const hashedPassword= await bcrypt.hash(password,salt)
+        const newUser= await User.create({email,fullname,password:hashedPassword})
+        if (!newUser) return res.status(400).json('failed to create new user')
+         res.status(200).json(newUser)   
+     }catch(err){
+         res.status(500).json(err)
+     }
+}
+
+const Login= async(req,res)=>{
+    try{
+        const {email,password}=req.body
+        const user=await User.findOne({email})
+        if(!user) return res.status(400).json('user not found')
+        const passwordMatch= await bcrypt.compare(password,user.password)   
+        if(!passwordMatch) return res.status(400).json('email or password not correctt')
+        res.status(200).json(user)
+
+    }catch(err){
+        res.status(500).json(err.message)
+    }
+}
+
+module.exports={Signup,Login}
