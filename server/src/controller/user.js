@@ -46,5 +46,21 @@ const UpdateProfile= async(req,res)=>{
       res.status(500).json(err.message)
     }
 }
+  
+const DeleteProfile=async(req,res)=>{
+    try{
+        const {userId}=req.params
+        const user= await User.findById(userId)
+        if(!user) return res.status(400).json('user with tis id not found')
+        const deletedUser= await User.findByIdAndDelete(userId)  
+        if(!deletedUser) return res.status(400).json('failed to delete')
+         res.status(200).json({msg:'this user deleted successfully', deletedUser})  
+    }catch(err){
+        res.status(500).json(err.message)
 
-module.exports={Signup,Login,UpdateProfile}
+
+    }
+}
+
+
+module.exports={Signup,Login,UpdateProfile,DeleteProfile}
