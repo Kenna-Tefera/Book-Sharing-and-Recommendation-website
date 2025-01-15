@@ -1,204 +1,225 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+
+
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+
+// const Profile = ({ userId, loggedInUserId }) => {
+//   const [user, setUser] = useState({});
+//   const [isFollowing, setIsFollowing] = useState(false);
+
+//   useEffect(() => {
+//     // Fetch the profile user data
+//     axios.get(`/api/profile/${userId}`)
+//       .then(response => {
+//         setUser(response.data);
+//         // Check if the logged-in user is already following this profile
+//         setIsFollowing(response.data.follower.includes(loggedInUserId));
+//       })
+//       .catch(error => console.error(error));
+//   }, [userId, loggedInUserId]);
+
+//   const handleFollow = () => {
+//     axios.post(`/api/profile/${userId}/follow`, { followerId: loggedInUserId })
+//       .then(response => {
+//         setUser(response.data); // Update user data
+//         setIsFollowing(true); // Set the following state
+//       })
+//       .catch(error => console.error(error));
+//   };
+
+//   const handleUnfollow = () => {
+//     axios.post(`/api/profile/${userId}/unfollow`, { followerId: loggedInUserId })
+//       .then(response => {
+//         setUser(response.data); // Update user data
+//         setIsFollowing(false); // Set the following state
+//       })
+//       .catch(error => console.error(error));
+//   };
+
+//   return (
+//     <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
+//       {/* Profile Picture */}
+//       <img
+//         src={user.profile_picture || '/default-avatar.png'}
+//         alt="Profile"
+//         className="w-24 h-24 rounded-full mx-auto"
+//       />
+
+//          {/* Follower and Following Counts */}
+//          <div className="flex justify-around mt-6">
+//         <div className="text-center">
+//         <p className="text-gray-600">Followers</p>
+//           <span className="text-xl font-bold">{user.follower?.length || 0}</span>
+//         </div>
+
+//         <div className="text-center">
+//           <p className="text-gray-600">Following</p>
+//           <span className="text-xl font-bold">{user.following?.length || 0}</span>
+//         </div>
+
+//         <div className="text-center">
+//           <p className="text-gray-600">Groups</p>
+//           <span className="text-xl font-bold">{user.Groups?.length || 0}</span>
+//         </div>
+//       </div>
+
+//       {/* Full Name */}
+//       <h2 className="text-center text-2xl font-bold mt-4">
+//         {user.fullname || "Your Name"}
+//       </h2>
+
+//       {/* Bio */}
+//       <p className="text-center text-gray-600">
+//         {user.bio || "Add a bio to let others know more about you."}
+//       </p>
+
+
+//       {/* Follow/Unfollow Button */}
+//       {/* <div className="flex justify-center mt-6">
+//         {loggedInUserId !== userId && (
+//           isFollowing ? ( */}
+//             <button
+//               className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+//               onClick={handleUnfollow}
+//             >
+//               Unfollow
+//             </button>
+//           {/* ) : ( */}
+//             <button
+//               className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+//               onClick={handleFollow}
+//             >
+//               Follow
+//             </button>
+//           {/* )
+//         )}
+//       </div> */}
+
+     
+//       {loggedInUserId === userId && (
+//         <div className="flex justify-between mt-6">
+//           <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+//             Edit Profile
+//           </button>
+//           <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+//             Delete Profile
+//           </button>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Profile;
+
+
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Sidebar from '../components/sidebar/sidebar';
-import Navbar from '../components/shared/navbar';
 
-const ProfilePage = () => {
-  const [activeTab, setActiveTab] = useState('aboutMe'); // Default active tab is "About Me"
-  const [isEditingAboutMe, setIsEditingAboutMe] = useState(false);
-  const [aboutMeText, setAboutMeText] = useState('Hello, I love reading and sharing books!');
-  const [books, setBooks] = useState([
-    { id: 1, title: 'The Great Adventure', description: 'A thrilling tale of adventure.' },
-    { id: 2, title: 'Mystery in the Dark', description: 'A gripping mystery novel.' },
-  ]);
-  const [favorites, setFavorites] = useState([
-    { id: 1, title: 'The Great Adventure', description: 'A thrilling tale of adventure.' },
-    { id: 2, title: 'Mystery in the Dark', description: 'A gripping mystery novel.' },
-  ]);
-  const [profilePicture, setProfilePicture] = useState('https://via.placeholder.com/100'); // Default profile picture
+const Profile = ({ userId, loggedInUserId }) => {
+  const [user, setUser] = useState({});
+  const [isFollowing, setIsFollowing] = useState(false);
 
-  const handleEditAboutMe = () => {
-    setIsEditingAboutMe(!isEditingAboutMe);
+  useEffect(() => {
+    axios.get(`/api/profile/${userId}`)
+      .then(response => {
+        setUser(response.data);
+        setIsFollowing(response.data.follower.includes(loggedInUserId));
+      })
+      .catch(error => console.error(error));
+  }, [userId, loggedInUserId]);
+
+  const handleFollow = () => {
+    axios.post(`/api/profile/${userId}/follow`, { followerId: loggedInUserId })
+      .then(response => {
+        setUser(response.data); 
+        setIsFollowing(true); 
+      })
+      .catch(error => console.error(error));
   };
 
-  const handleSaveAboutMe = () => {
-    setIsEditingAboutMe(false);
-    // Optionally save the data to the backend here
-  };
-
-  const handleDeleteProfile = () => {
-    // Code to handle profile deletion
-    alert('Profile deleted!');
-  };
-
-  const handleProfilePictureChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePicture(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleDeleteProfilePicture = () => {
-    setProfilePicture('https://via.placeholder.com/100'); // Reset to default image
+  const handleUnfollow = () => {
+    axios.post(`/api/profile/${userId}/unfollow`, { followerId: loggedInUserId })
+      .then(response => {
+        setUser(response.data); 
+        setIsFollowing(false); 
+      })
+      .catch(error => console.error(error));
   };
 
   return (
-    <div className="flex flex-col">
-      {/* Main content area */}
-      <div className="flex flex-1">
-        {/* Sidebar */}
-        <Sidebar />
+    <div className="flex h-screen">
+      <Sidebar />
+      
+      <div className="max-w-4xl mx-auto p-10 bg-white shadow-md rounded-lg my-10">
+        <div className="flex flex-col md:flex-row items-center md:items-start justify-between space-y-6 md:space-y-0 md:space-x-6">
+          <img
+            src={user.profile_picture || 'assets/img/book.jpg'}
+            alt="Profile"
+            className="w-24 h-24 rounded-full"
+          />
 
-        {/* Profile Content */}
-        <div className="flex-1 p-8">
-          {/* Profile Header */}
-          <div className="profile-header text-center mb-8">
-            <img
-              src={profilePicture}
-              alt="Profile"
-              className="w-24 h-24 rounded-full border-2 border-gray-500 mb-4 mx-auto" // mx-auto centers the image
-            />
-            <h2 className="text-2xl font-semibold">John Doe</h2>
-            <p className="text-gray-500">Book Lover</p>
+          <div className="flex flex-col items-center md:items-start">
+            <h2 className="text-xl font-semibold">
+              {user.fullname || "Full Name Not Provided"}
+            </h2>
+            <p className="text-gray-600 mt-2">
+              {user.email || "Email Not Provided"}
+            </p>
+
+            {/* Only show follow/unfollow button if the logged-in user is not the profile owner */}
+            {loggedInUserId !== userId && (
+              <button
+                className={`mt-4 py-2 px-6 rounded text-white ${isFollowing ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'}`}
+                onClick={isFollowing ? handleUnfollow : handleFollow}
+              >
+                {isFollowing ? 'Unfollow' : 'Follow'}
+              </button>
+            )}
           </div>
-
-          {/* Tab Navigation */}
-          <div className="navigation mb-8 text-center">
-            <ul className="flex justify-center space-x-8">
-              <li>
-                <button
-                  className={`text-xl ${activeTab === 'aboutMe' ? 'text-blue-500' : 'text-gray-700'} hover:text-blue-500`}
-                  onClick={() => setActiveTab('aboutMe')}
-                >
-                  About Me
-                </button>
-              </li>
-              <li>
-                <button
-                  className={`text-xl ${activeTab === 'favorites' ? 'text-blue-500' : 'text-gray-700'} hover:text-blue-500`}
-                  onClick={() => setActiveTab('favorites')}
-                >
-                  Favorites
-                </button>
-              </li>
-              <li>
-                <button
-                  className={`text-xl ${activeTab === 'myBooks' ? 'text-blue-500' : 'text-gray-700'} hover:text-blue-500`}
-                  onClick={() => setActiveTab('myBooks')}
-                >
-                  My Books
-                </button>
-              </li>
-              <li>
-                <button
-                  className={`text-xl ${activeTab === 'profileSettings' ? 'text-blue-500' : 'text-gray-700'} hover:text-blue-500`}
-                  onClick={() => setActiveTab('profileSettings')}
-                >
-                  Profile Settings
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Tab Contents */}
-          {activeTab === 'aboutMe' && (
-            <section id="aboutMe" className="mb-8">
-              <h2 className="text-2xl mb-4">About Me</h2>
-              {isEditingAboutMe ? (
-                <div>
-                  <textarea
-                    value={aboutMeText}
-                    onChange={(e) => setAboutMeText(e.target.value)}
-                    className="w-full h-24 p-2 mb-4 border rounded"
-                  />
-                  <button onClick={handleSaveAboutMe} className="bg-blue-500 text-white p-2 rounded">Save</button>
-                </div>
-              ) : (
-                <div>
-                  <p>{aboutMeText}</p>
-                  <button onClick={handleEditAboutMe} className="bg-yellow-500 text-white p-2 rounded mt-4">Edit</button>
-                </div>
-              )}
-            </section>
-          )}
-
-          {activeTab === 'favorites' && (
-            <section id="favorites" className="mb-8">
-              <h2 className="text-2xl mb-4">Favorites</h2>
-              <ul>
-                {favorites.map((book) => (
-                  <li key={book.id} className="mb-4 p-4 bg-gray-100 rounded">
-                    <h3 className="text-xl font-semibold">{book.title}</h3>
-                    <p>{book.description}</p>
-                    <div className="mt-2">
-                      <button className="bg-green-500 text-white p-2 rounded mr-2">View</button>
-                      <button className="bg-blue-500 text-white p-2 rounded">Edit</button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {activeTab === 'myBooks' && (
-            <section id="myBooks" className="mb-8">
-              <h2 className="text-2xl mb-4">My Books</h2>
-              <ul>
-                {books.map((book) => (
-                  <li key={book.id} className="mb-4 p-4 bg-gray-100 rounded">
-                    <h3 className="text-xl font-semibold">{book.title}</h3>
-                    <p>{book.description}</p>
-                    <div className="mt-2">
-                      <button className="bg-green-500 text-white p-2 rounded mr-2">View</button>
-                      <button className="bg-blue-500 text-white p-2 rounded">Edit</button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {activeTab === 'profileSettings' && (
-            <section id="profileSettings">
-              <h2 className="text-2xl mb-4">Profile Settings</h2>
-              <div className="bg-gray-100 p-4 rounded mb-4">
-                <p className="font-semibold">Name: John Doe</p>
-                <p className="font-semibold">Email: johndoe@example.com</p>
-
-                {/* Profile Picture Change */}
-                <div className="mt-4">
-                  <h3 className="text-xl mb-2">Profile Picture</h3>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleProfilePictureChange}
-                    className="mb-4"
-                  />
-                  {profilePicture !== 'https://via.placeholder.com/100' && (
-                    <button
-                      onClick={handleDeleteProfilePicture}
-                      className="bg-red-500 text-white p-2 rounded"
-                    >
-                      Delete Profile Picture
-                    </button>
-                  )}
-                </div>
-
-                <div className="mt-4">
-                  <button className="bg-blue-500 text-white p-2 rounded mr-2">Edit</button>
-                  <button className="bg-red-500 text-white p-2 rounded" onClick={handleDeleteProfile}>Delete</button>
-                </div>
-              </div>
-            </section>
-          )}
         </div>
+
+        {/* Followers, Following, and Groups */}
+        <div className="flex justify-around mt-6 space-x-8">
+          <div className="text-center">
+            <p className="text-gray-600">Followers</p>
+            <span className="text-xl font-bold">{user.follower?.length || 0}</span>
+          </div>
+
+          <div className="text-center">
+            <p className="text-gray-600">Following</p>
+            <span className="text-xl font-bold">{user.following?.length || 0}</span>
+          </div>
+
+          <div className="text-center">
+            <p className="text-gray-600">Groups</p>
+            <span className="text-xl font-bold">{user.Groups?.length || 0}</span>
+          </div>
+        </div>
+
+        {/* Bio */}
+        <p className="text-center text-gray-600 mt-2">
+          {user.bio || "Add a bio to let others know more about you."}
+        </p>
+
+        {/* Edit/Delete Profile buttons */}
+        {loggedInUserId === userId && (
+          <div className="flex justify-between mt-6">
+            <a href="/editprofile">
+              <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                Edit Profile
+              </button>
+            </a>
+            <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+              Delete Profile
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default ProfilePage;
+export default Profile;
