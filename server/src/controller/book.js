@@ -39,4 +39,35 @@ const GetAllBooks=async(req,res)=>{
 }
 
 
-module.exports=  {CreateBook,GetOneBook,GetAllBooks}
+const UpdateBook= async(req,res)=>{
+    try{
+        const {bookId}= req.params
+        const inputs= req.body
+        const book= await Book.findById(bookId)
+        if(!book) return res.status(400).json('book not found')
+        const updatedBook= await Book.findByIdAndUpdate(bookId, inputs,{new:true})  
+        if(!updatedBook) return res.status(400).json('failed to update') 
+        res.status(200).json(updatedBook)     
+    }catch(err){
+        res.status(500).json(err.message)
+
+    }
+
+}
+
+
+const DeleteBook=async(req,res)=>{
+    try{
+        const {bookId}=req.params
+        const book= await Book.findById(bookId)
+        if(!book) return res.status(400).json('book with this id not found')
+         const deletedBook= await Book.findByIdAndDelete(bookId) 
+        if(!deletedBook) return res.status(400).json('failed to delete book')
+         res.status(200).json({msg:'book deleted', deletedBook})   
+
+    }catch(err){
+        res.status(500).json(err.message)
+
+    }
+}
+module.exports=  {CreateBook,GetOneBook,GetAllBooks,UpdateBook, DeleteBook}
