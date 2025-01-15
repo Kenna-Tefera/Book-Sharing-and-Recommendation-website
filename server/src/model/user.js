@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
 
-const useSchema= new mongoose.Schema({
+const userSchema= new mongoose.Schema({
     fullname:{
         type:String
     },
@@ -39,4 +39,4 @@ const useSchema= new mongoose.Schema({
 
 },{timestamps:true})
 
-module.exports = mongoose.model('User',useSchema)
+module.exports = mongoose.model('User',userSchema)

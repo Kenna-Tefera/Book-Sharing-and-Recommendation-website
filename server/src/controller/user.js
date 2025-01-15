@@ -4,6 +4,7 @@ const app=express()
 const User=require('../model/user')
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
+const Group= require('../model/group')
 
 const Signup= async(req,res)=>{
      try{
@@ -38,7 +39,7 @@ const Login= async(req,res)=>{
 
 const getAllUsers=async(req,res)=>{
     try{
-         const users= await User.find().populate()
+         const users= await User.find().populate('follower following group');
          if(!users) return res.status(400).json('failed to fetch')
          res.status(200).json(users)  
     }catch(err){
@@ -49,7 +50,7 @@ const getAllUsers=async(req,res)=>{
 const getOneUser=async(req,res)=>{
     try{
         const userId= req.params.userId
-        const user= await User.findById(userId)
+        const user= await User.findById(userId).populate('follower') .populate('following') .populate('group'); 
         if(!user) return res.status(400).json('failed to fetch')
         res.status(200).json(user)  
     
