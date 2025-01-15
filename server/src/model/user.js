@@ -24,16 +24,21 @@ const userSchema= new mongoose.Schema({
     },
     follower:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'User'
+        ref:'User',
+        default:[]
     }],
     following:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'User'
+        ref:'User',
+        default:[]
     }],
     group:[{
-      type:mongoose.Schema.Types.ObjectId,
-        ref:'Group'
-    }]
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Group',
+        default:[]
+    }],
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
     
 
 
