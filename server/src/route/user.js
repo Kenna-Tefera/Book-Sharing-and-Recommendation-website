@@ -7,11 +7,13 @@ const auth= require('../middleware/auth')
 
 router.post('/signup',Signup)
 router.post('/login',Login)
-router.get('/alluser',getAllUsers)
-router.get('/:userId',getOneUser)
+router.get('/alluser',auth,getAllUsers)
+router.get('/:userId',auth,getOneUser)
 router.put('/updateProfile/:userId',auth,UpdateProfile)
 router.delete('/deleteProfile/:userId',auth,DeleteProfile)
 router.post('/require-reset',requireResetPassword)
 router.post('/reset-password/:token',resetPassword)
+
+
 
 module.exports= router
