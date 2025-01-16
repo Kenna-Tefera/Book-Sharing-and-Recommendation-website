@@ -42,7 +42,7 @@ const Login= async(req,res)=>{
 
 const getAllUsers=async(req,res)=>{
     try{
-         const users= await User.find().populate('follower following group');
+         const users= await User.find().populate('follower') .populate('following') .populate('group');
          if(!users) return res.status(400).json('failed to fetch')
          res.status(200).json(users)  
     }catch(err){

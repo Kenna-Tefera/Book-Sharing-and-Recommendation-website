@@ -18,10 +18,12 @@ const bookShema= new mongoose.Schema({
         type:String
     },
     creator:{type:String},
-    comments:{
-       type:[String],
-       default:[]
-    },
+
+    comments:[{
+        
+       commentator:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
+       comment:String
+    }],
     like:{
         type:[String],
         default:[]

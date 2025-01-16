@@ -1,3 +1,4 @@
+const book = require('../model/book')
 const Book=require('../model/book')
 
 
@@ -17,7 +18,8 @@ const CreateBook=async( req,res)=>{
 const GetOneBook=async(req,res)=>{
        try{
         const bookId= req.params.bookId
-        const book= await Book.findById(bookId)
+        const book= await Book.findById(bookId).populate('comments.commentator','fullname email')
+                                               //  .exec();
         if(!book) return res.status(400).json('coudnt find the book with that id')
          res.status(200).json(book)   
        }catch(err){
@@ -29,7 +31,8 @@ const GetOneBook=async(req,res)=>{
 
 const GetAllBooks=async(req,res)=>{
     try{
-       const books= await Book.find()
+      // const books= await Book.find()
+       const books= await Book.find().populate('comments.commentator','fullname email')
        if(!books) return res.status(400).json('failed to fetch')
         res.status(200).json(books)
     }catch(err){
@@ -70,4 +73,22 @@ const DeleteBook=async(req,res)=>{
 
     }
 }
-module.exports=  {CreateBook,GetOneBook,GetAllBooks,UpdateBook, DeleteBook}
+
+const AddComment=async(req,res)=>{
+    try{
+        const bookId=req.params.bookId
+        const {comment}=req.body
+        const userId= req.userId
+        const book= await Book.findById(bookId)
+        if(!book) return res.status(400).json('book with this id not found')
+        book.comments.push({comment:comment, commentator:userId}) 
+        await book.save()
+        res.status(200).json({msg:'commnet added', book})
+    }catch(err){
+        res.status(500).json(err.message)
+
+    }
+
+}
+module.exports=  {CreateBook,GetOneBook,GetAllBooks,UpdateBook, DeleteBook, AddComment}
+
