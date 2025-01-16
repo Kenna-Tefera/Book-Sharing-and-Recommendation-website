@@ -97,6 +97,7 @@ const LikeBook=async(req,res)=>{
         const {liker}= req.body
         const book= await Book.findById(bookId)
         if(!book) return res.status(400).json('book with this id not found')
+        if(book.likes.includes(liker)) return res.status(400).json('User already liked this book');
         book.likes.push(liker)
         await book.save()
         res.status(200).json({msg:'liked', book})
