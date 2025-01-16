@@ -166,7 +166,9 @@ const Follow=async(req,res)=>{
        if(user.follower.includes(newFollower)) return res.status(400).json('User already follow ');
        
        user.follower.push(newFollower)
-       await user.save()
+         await user.save()
+       theFollower.following.push(userId)
+         await user.save()
        res.status(200).json({msg:'followed', user});  
 
     }catch(err){
