@@ -147,10 +147,31 @@ const resetPassword=async(req,res)=>{
          res.status(200).send('Password updated');  
     
     }catch(err){
-        console.log(err)
         res.status(500).json(err.message)
          
     }
+
 }
 
-module.exports={Signup,Login,UpdateProfile,DeleteProfile,getAllUsers,getOneUser,requireResetPassword,resetPassword}
+const Follow=async(req,res)=>{
+    try{
+       const {userId}= req.params
+       const {newFollower}=req.body
+       const user= await User.findById(userId)
+       const theFollower= await User.findById(newFollower)
+       
+       if(!user) return res.status(400).json('user with this id not found')
+       if(!theFollower) return res.status(400).json('this follower with this id not found')
+       if(newFollower === userId) res.status(400).json('cant follow yourself')
+       if(user.follower.includes(newFollower)) return res.status(400).json('User already follow ');
+       
+       user.follower.push(newFollower)
+       await user.save()
+       res.status(200).json({msg:'followed', user});  
+
+    }catch(err){
+
+    }
+}
+
+module.exports={Signup,Login,UpdateProfile,DeleteProfile,getAllUsers,getOneUser,requireResetPassword,resetPassword,Follow}
