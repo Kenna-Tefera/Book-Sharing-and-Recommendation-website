@@ -90,5 +90,23 @@ const AddComment=async(req,res)=>{
     }
 
 }
-module.exports=  {CreateBook,GetOneBook,GetAllBooks,UpdateBook, DeleteBook, AddComment}
+
+const LikeBook=async(req,res)=>{
+    try{
+        const {bookId }=req.params
+        const {liker}= req.body
+        const book= await Book.findById(bookId)
+        if(!book) return res.status(400).json('book with this id not found')
+        book.likes.push(liker)
+        await book.save()
+        res.status(200).json({msg:'liked', book})
+
+
+    }catch(err){
+        res.status(500).json(err.message)
+
+    }
+}
+
+module.exports=  {CreateBook,GetOneBook,GetAllBooks,UpdateBook, DeleteBook, AddComment,LikeBook}
 

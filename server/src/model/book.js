@@ -24,10 +24,10 @@ const bookShema= new mongoose.Schema({
        commentator:{type:mongoose.Schema.Types.ObjectId, ref:'User'},
        comment:String
     }],
-    like:{
-        type:[String],
-        default:[]
-    },
+    likes:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'User',
+    }],
    rate:{
        number_of_star:{
         type:Number,

@@ -21,7 +21,7 @@ const Signup= async(req,res)=>{
         const token= jwt.sign({id:newUser._id, email:newUser.email},'book',{expiresIn:'30d'})    
          res.status(200).json({msg:'registerd',newUser,token})   
      }catch(err){
-         res.status(500).json(err)
+         res.status(500).json(err.message)
      }
 }
 
@@ -42,7 +42,7 @@ const Login = async(req,res)=>{
 
 const getAllUsers=async(req,res)=>{
     try{
-         const users= await User.find().populate('follower') .populate('following') .populate('group');
+         const users= await User.find().populate('follower').populate('following').populate('group');
          if(!users) return res.status(400).json('failed to fetch')
          res.status(200).json(users)  
     }catch(err){
@@ -53,7 +53,7 @@ const getAllUsers=async(req,res)=>{
 const getOneUser=async(req,res)=>{
     try{
         const userId= req.params.userId
-        const user= await User.findById(userId).populate('follower') .populate('following') .populate('group'); 
+        const user= await User.findById(userId).populate('follower').populate('following').populate('group'); 
         if(!user) return res.status(400).json('failed to fetch')
         res.status(200).json(user)  
     
