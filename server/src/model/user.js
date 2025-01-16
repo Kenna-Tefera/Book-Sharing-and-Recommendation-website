@@ -22,6 +22,7 @@ const userSchema= new mongoose.Schema({
     bio:{
         type:String
     },
+    address:String,
     follower:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
