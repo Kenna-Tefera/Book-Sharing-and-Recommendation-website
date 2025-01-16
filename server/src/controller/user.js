@@ -169,7 +169,7 @@ const Follow=async(req,res)=>{
        theFollower.following.push(userId)
 
        await user.save()
-       await user.save()
+       await theFollower.save()
 
        res.status(200).json({msg:'followed', user,theFollower});  
 
