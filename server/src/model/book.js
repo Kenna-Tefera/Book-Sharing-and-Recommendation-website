@@ -14,6 +14,9 @@ const bookShema= new mongoose.Schema({
     genre:{
         type:String
     },
+    publish_date:{
+        type:Date
+    },
     coverPage:{
         type:String
     },
