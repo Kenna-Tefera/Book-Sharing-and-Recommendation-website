@@ -14,7 +14,7 @@ const Signup= async(req,res)=>{
         const {fullname,email,password}= req.body
         const isUserExist= await User.findOne({email:email})
         if(isUserExist) return res.status(400).json('user aleardy exist')
-        const salt=   await bcrypt.genSalt(10)
+        const salt =   await bcrypt.genSalt(10)
         const hashedPassword= await bcrypt.hash(password,salt)
         const newUser= await User.create({email,fullname,password:hashedPassword})
         if (!newUser) return res.status(400).json('failed to create new user')
@@ -25,14 +25,14 @@ const Signup= async(req,res)=>{
      }
 }
 
-const Login= async(req,res)=>{
+const Login = async(req,res)=>{
     try{
         const {email,password}=req.body
-        const user=await User.findOne({email})
+        const user = await User.findOne({email})
         if(!user) return res.status(400).json('user not found')
         const passwordMatch= await bcrypt.compare(password,user.password)   
         if(!passwordMatch) return res.status(400).json('email or password not correctt')
-        const token= jwt.sign({id:user._id, email:user.email},'book',{expiresIn:'30d'})    
+        const token = jwt.sign({id:user._id, email:user.email},'book',{expiresIn:'30d'})    
         res.status(200).json({msg:'logedIn',user,token})  
 
     }catch(err){
@@ -80,7 +80,7 @@ const UpdateProfile= async(req,res)=>{
   
 const DeleteProfile=async(req,res)=>{
     try{
-        const {userId}=req.params
+        const {userId} = req.params
         const user= await User.findById(userId)
         if(!user) return res.status(400).json('user with tis id not found')
         const deletedUser= await User.findByIdAndDelete(userId)  

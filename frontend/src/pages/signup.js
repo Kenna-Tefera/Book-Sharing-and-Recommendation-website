@@ -1,6 +1,9 @@
+
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
 const Signup = () => {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -8,32 +11,84 @@ const Signup = () => {
     password: '',
   });
 
-  const [isChecked, setIsChecked] = useState(false); // State for checkbox
-  const navigate = useNavigate(); // Hook for navigation
+  const [errors, setErrors] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+  });
+
+  const [isChecked, setIsChecked] = useState(false); 
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
+  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
+
+    // Clear error when user starts typing
+    setErrors({ ...errors, [id]: '' });
   };
 
-  const handleSubmit = (e) => {
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
+
+  const validateEmail = (email) => {
+    const regex = /\S+@\S+\.\S+/;
+    return regex.test(email);
+  };
+
+  const validatePassword = (password) => {
+    const minLength = /^(?=.{8,})/;
+    const uppercase = /[A-Z]/;
+    const lowercase = /[a-z]/;
+    const number = /\d/;
+    const specialChar = /[!@#$%^&*(),.?":{}|<>]/;
+
+    return (
+      minLength.test(password) &&
+      uppercase.test(password) &&
+      lowercase.test(password) &&
+      number.test(password) &&
+      specialChar.test(password)
+    );
+  };
+
+  const validate = () => {
+    let formErrors = {};
+
+    if (!formData.fullName) formErrors.fullName = 'Full name is required';
+    if (!formData.email) formErrors.email = 'Email is required';
+    else if (!validateEmail(formData.email)) formErrors.email = 'Email is invalid';
+    if (!formData.password) formErrors.password = 'Password is required';
+    else if (!validatePassword(formData.password))
+      formErrors.password =
+        'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character';
+    if (!isChecked) formErrors.terms = 'You must agree to the Terms and Conditions';
+
+    setErrors(formErrors);
+    return Object.keys(formErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.fullName || !formData.email || !formData.password) {
-      alert('Please fill in all the fields!');
+    if (!validate()) {
       return;
     }
 
-    if (!isChecked) {
-      alert('You must agree to the Terms and Conditions!');
-      return;
+    try {
+      const response = await axios.post('http://localhost:5000/user/signup', formData);
+      if (response.data.msg === 'registerd') {
+        navigate('/login');
+        alert('Registration Successful!');
+      } else {
+        alert('Registration failed: ' + response.data.message);
+      }
+    } catch (error) {
+      console.error('Error registration:', error);
+      alert('An error occurred while registering. Please try again.');
     }
-
-    // Here you can add your API call to handle the signup logic
-    console.log('Form submitted:', formData);
-
-    // After successful signup, redirect to the login page
-    navigate('/login'); // Redirect to the login page
   };
 
   return (
@@ -43,10 +98,7 @@ const Signup = () => {
         <div className="w-full">
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label
-                htmlFor="fullName"
-                className="block text-gray-400 text-sm font-bold mb-2"
-              >
+              <label htmlFor="fullName" className="block text-gray-400 text-sm font-bold mb-2">
                 Full Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -57,13 +109,11 @@ const Signup = () => {
                 value={formData.fullName}
                 onChange={handleChange}
               />
+              {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
             </div>
 
             <div className="mb-4">
-              <label
-                htmlFor="email"
-                className="block text-gray-400 text-sm font-bold mb-2"
-              >
+              <label htmlFor="email" className="block text-gray-400 text-sm font-bold mb-2">
                 Email <span className="text-red-500">*</span>
               </label>
               <input
@@ -74,23 +124,31 @@ const Signup = () => {
                 value={formData.email}
                 onChange={handleChange}
               />
+              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
             </div>
 
             <div className="mb-4">
-              <label
-                htmlFor="password"
-                className="block text-gray-400 text-sm font-bold mb-2"
-              >
+              <label htmlFor="password" className="block text-gray-400 text-sm font-bold mb-2">
                 Password <span className="text-red-500">*</span>
               </label>
-              <input
-                className="appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="password"
-                type="password"
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-              />
+              <div className="relative">
+                <input
+                  className="appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="password"
+                  type={isPasswordVisible ? 'text' : 'password'}
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                >
+                  {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
             </div>
 
             <div className="mb-4">
@@ -109,14 +167,17 @@ const Signup = () => {
                   </Link>
                 </span>
               </label>
+              {errors.terms && <p className="text-red-500 text-xs mt-1">{errors.terms}</p>}
             </div>
 
             <div className="flex items-center justify-center">
               <button
                 id="signupButton"
-                className={`text-white font-bold py-2 px-4 rounded-3xl w-full ${isChecked ? 'bg-[#003377]' : 'bg-gray-400 cursor-not-allowed'} hover:bg-blue-600 transition-colors`}
+                className={`text-white font-bold py-2 px-4 rounded-3xl w-full ${
+                  isChecked ? 'bg-[#003377]' : 'bg-gray-400 cursor-not-allowed'
+                } hover:bg-blue-600 transition-colors`}
                 type="submit"
-                disabled={!isChecked} // Disable button if checkbox is not checked
+                disabled={!isChecked}
               >
                 Sign Up
               </button>
