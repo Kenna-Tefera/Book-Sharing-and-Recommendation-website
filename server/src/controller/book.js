@@ -109,5 +109,31 @@ const LikeBook=async(req,res)=>{
     }
 }
 
-module.exports=  {CreateBook,GetOneBook,GetAllBooks,UpdateBook, DeleteBook, AddComment,LikeBook}
+const SearchBooks = async (req, res) => {
+    try {
+        const { searchQuery } = req.query;
+
+        if (!searchQuery) {
+            return res.status(400).json({ msg: "Search query is required" });
+        }
+        const books = await Book.find({
+            $or: [
+                { title: { $regex: searchQuery, $options: 'i' } }, 
+                { author: { $regex: searchQuery, $options: 'i' } }, 
+                { genre: { $regex: searchQuery, $options: 'i' } }
+            ]
+        });
+
+        if ( books.length === 0) {
+            return res.status(404).json({ msg: "No books found" });
+        }
+
+        res.status(200).json(books);
+    } catch (error) {
+        res.status(500).json(error.message);
+    }
+};
+
+
+module.exports=  {CreateBook,GetOneBook,GetAllBooks,UpdateBook, DeleteBook, AddComment,LikeBook,SearchBooks}
 
