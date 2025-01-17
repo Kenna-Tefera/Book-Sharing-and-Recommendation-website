@@ -134,6 +134,24 @@ const SearchBooks = async (req, res) => {
     }
 };
 
+const FilterBooksByGenre= async (req, res) => {
+    try {
+        const { genre } = req.query;
 
-module.exports=  {CreateBook,GetOneBook,GetAllBooks,UpdateBook, DeleteBook, AddComment,LikeBook,SearchBooks}
+        if (!genre) {
+            return res.status(400).json({ msg: "genre query is required" });
+        }
+        const books = await Book.find({genre: { $regex: genre, $options: 'i' }  });
+
+        if ( books.length === 0) {
+            return res.status(404).json({ msg: "No books found" });
+        }
+
+        res.status(200).json(books);
+    } catch (error) {
+        res.status(500).json(error.message);
+    }
+};
+
+module.exports=  {CreateBook,GetOneBook,GetAllBooks,UpdateBook, DeleteBook, AddComment,LikeBook,SearchBooks,FilterBooksByGenre}
 
