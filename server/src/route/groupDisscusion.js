@@ -8,6 +8,6 @@ const {CreateGroup,GetAllGroup,GetOneGroup}= require('../controller/groupDisscus
 
 router.post('/create',auth,CreateGroup)
 router.get('/allgroups',auth,GetAllGroup)
-router.get('/:groupId',auth,get)
+router.get('/:groupId',auth,GetOneGroup)
 
 module.exports= router
