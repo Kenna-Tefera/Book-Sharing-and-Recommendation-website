@@ -42,4 +42,44 @@ const GetOneGroup=async(req,res)=>{
     }
 }
 
-module.exports= {CreateGroup,GetAllGroup,GetOneGroup}
+const UpdateGroup=async(req,res)=>{
+    try{
+        const {groupId}= req.params
+        const userId = req.userId
+        const inputs= req.body
+
+        const group= await Group.findById(groupId)
+        if(!group)  return res.status(400).json('group not found')
+        if(!(group.creator === userId))  return res.status(400).json('you can only update the group you created')
+        
+            const updatedGroup = await Group.findByIdAndUpdate(groupId,inputs,{new:true})
+        if(!updatedGroup)  return res.status(400).json('failed to update the group')
+         res.status(200).json(updatedGroup)
+    }catch(err){
+        res.status(500).json(err.message)
+ 
+    }
+
+}
+
+const DeleteGroup=async(req,res)=>{
+    try{
+        const {groupId}= req.params
+        const userId = req.userId
+
+        const group= await Group.findById(groupId)
+        if(!group)  return res.status(400).json('group not found')
+        if(!(group.creator === userId))  return res.status(400).json('you can only delete the group you created')
+        
+        const deletedGroup = await Group.findByIdAndDelete(groupId)
+        if(!deletedGroup)  return res.status(400).json('failed to delete the group')
+        res.status(200).json({msg:"deleted", deletedGroup})
+    }catch(err){
+        res.status(500).json(err.message)
+ 
+    }
+
+}
+
+
+module.exports= {CreateGroup,GetAllGroup,GetOneGroup,UpdateGroup,DeleteGroup}
