@@ -53,7 +53,7 @@ const getAllUsers=async(req,res)=>{
 const getOneUser=async(req,res)=>{
     try{
         const userId= req.params.userId
-        const user= await User.findById(userId).populate('follower').populate('following').populate('group'); 
+        const user= await User.findById(userId).populate('follower').populate('following').populate('group','name username'); 
         if(!user) return res.status(400).json('failed to fetch')
         res.status(200).json(user)  
     
