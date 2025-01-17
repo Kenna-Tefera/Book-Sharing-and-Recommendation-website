@@ -1,4 +1,3 @@
-const book = require('../model/book')
 const Book=require('../model/book')
 const User=require('../model/user')
 

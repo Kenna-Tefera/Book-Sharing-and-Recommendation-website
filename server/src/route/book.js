@@ -13,6 +13,6 @@ router.put('/updatebook/:bookId',auth,UpdateBook)
 router.delete('/deletebook/:bookId',auth,DeleteBook)
 router.post('/comment/:bookId',auth,AddComment)
 router.post('/:bookId/like',auth,LikeBook)
-router.post('/:bookId/rate',RateBook)
+router.post('/:bookId/rate',auth,RateBook)
 
 module.exports=router

@@ -4,6 +4,9 @@ const groupSchema= new mongoose.Schema({
     name:{
         type:String
     },
+    username:{
+        type:String
+    },
     
     description:{
         type:String
@@ -16,6 +19,11 @@ const groupSchema= new mongoose.Schema({
         ref:'User',
         default:[]
     }],
+    chats:[{
+        texter:{type:mongoose.Schema.Types.ObjectId,ref:'User'},
+        text:{type:String}
+         
+    }]
     
 
 
