@@ -36,6 +36,7 @@ const bookShema= new mongoose.Schema({
         type:Number,
         default:0
        },
+       
        rater:[
         {
             userId:{type: mongoose.Schema.Types.ObjectId , ref:'User'},

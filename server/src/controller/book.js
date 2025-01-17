@@ -1,6 +1,6 @@
 const book = require('../model/book')
 const Book=require('../model/book')
-
+const User=require('../model/user')
 
 const CreateBook=async( req,res)=>{
     try{
@@ -153,5 +153,35 @@ const FilterBooksByGenre= async (req, res) => {
     }
 };
 
-module.exports=  {CreateBook,GetOneBook,GetAllBooks,UpdateBook, DeleteBook, AddComment,LikeBook,SearchBooks,FilterBooksByGenre}
+const RateBook=async(req,res)=>{
+    try{
+       const {userId,newStar}=req.body
+       const {bookId}=req.params
+       const user= await User.findById(userId)
+       if(!user) return  res.status(400).json('the rater not found in user list')
+       const book= await Book.findById(bookId)
+       if(!book) return  res.status(400).json('book is not found')
+      const alreadyRated=  book.rate.rater.findIndex((e)=>e.userId.toString() === userId) 
+      
+       if(alreadyRated !== -1 ){
+       const  previousRating= book.rate.rater[alreadyRated].star
+       book.rate.rater[alreadyRated].star=newStar
+
+       book.rate.number_of_star= book.rate.number_of_star - previousRating + newStar
+      }else{
+        book.rate.number_of_star= book.rate.number_of_star + newStar
+        book.rate.rater.push({userId:userId, star:newStar})
+      }
+
+      await book.save()
+      res.status(200).json(book)
+       
+
+    }catch(err){
+        res.status(500).json(err.message);
+
+    }
+}
+
+module.exports=  {CreateBook,GetOneBook,GetAllBooks,UpdateBook, DeleteBook, AddComment,LikeBook,SearchBooks,FilterBooksByGenre,RateBook}
 
