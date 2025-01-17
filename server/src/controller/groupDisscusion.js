@@ -23,7 +23,7 @@ const CreateGroup=async(req,res)=>{
 const GetAllGroup=async(req,res)=>{
     try{
         const groups= await Group.find().populate('members','fullname')
-        if(!groups) return res.status(400).json('failed to fetch')
+        if(!groups) return res.status(400).json('fgroup not found')
          res.status(200).json(groups)   
     }catch(err){
         res.status(500).json(err.message)
