@@ -156,11 +156,11 @@ const resetPassword=async(req,res)=>{
 const Follow=async(req,res)=>{
     try{
        const {userId}= req.params
-       const {newFollower}=req.body
+       const newFollower=req.userId
        const user= await User.findById(userId)
        const theFollower= await User.findById(newFollower)
        
-       if(!user) return res.status(400).json('user with this id not found')
+       if(!user) return res.status(400).json('user to follow with this id not found')
        if(!theFollower) return res.status(400).json('this follower with this id not found')
        if(newFollower === userId) res.status(400).json('cant follow yourself')
        if(user.follower.includes(newFollower)) return res.status(400).json('User already follow ');
@@ -178,4 +178,34 @@ const Follow=async(req,res)=>{
     }
 }
 
-module.exports={Signup,Login,UpdateProfile,DeleteProfile,getAllUsers,getOneUser,requireResetPassword,resetPassword,Follow}
+const UnFollow=async(req,res)=>{
+    try{
+
+     const {unfollower}=req.body
+     const {userIdToUnfollow}=req.body
+
+     const user= await User.findById(userId)
+     const userToUnfollow= await User.findById(userIdToUnfollow)
+     
+     if(!user) return res.status(400).json('user with this id not found')
+     if(!userToUnfollow) return res.status(400).json('this follower with this id not found')  
+      
+    if(userToUnfollow.follower.includes(userId)){
+        userToUnfollow.follower=  userToUnfollow.follower.filter((e)=>e.toString() !==userId)
+        user.following==user.following((e)=>e.toString() !==userIdToUnfollow)
+
+        await userToUnfollow.save()
+        await user.save()
+        res.status(200).json(userToUnfollow)
+    }else{
+        res.status(400).json(' the unfollwer id not in list of follower')
+
+    }    
+
+    }catch(err){
+        res.status(500).json(err.message)
+    }
+
+}
+
+module.exports={Signup,Login,UpdateProfile,DeleteProfile,getAllUsers,getOneUser,requireResetPassword,resetPassword,Follow,UnFollow}
