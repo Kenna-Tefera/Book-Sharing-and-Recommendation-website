@@ -203,10 +203,17 @@ const CancelJoinRequest=async(req,res)=>{
     }
 }
 
+const LeaveGroup=async(req,res)=>{
+    try{
 
+    }catch(err){
+        res.status(500).json(err.message)
+
+    }
+}
 
 //guys to accept the join request of group just use addMember api with id of join request sender
 
 
 
-module.exports= {CreateGroup,GetAllGroup,GetOneGroup,UpdateGroup,DeleteGroup,AddMember,RemoveMember,SendJoinRequest,CancelJoinRequest}
+module.exports= {CreateGroup,GetAllGroup,GetOneGroup,UpdateGroup,DeleteGroup,AddMember,RemoveMember,SendJoinRequest,CancelJoinRequest,LeaveGroup}
