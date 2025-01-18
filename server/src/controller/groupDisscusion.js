@@ -153,8 +153,8 @@ const SendJoinRequest=async(req,res)=>{
     try{
          
         const {groupId}= req.params
-        const userId = req.userId
-        const {memberToJoin} = req.body
+        // const userId = req.userId
+        const memberToJoin = req.userId
 
         const group= await Group.findById(groupId)
         const user= await User.findById(memberToJoin)
@@ -183,7 +183,7 @@ const SendJoinRequest=async(req,res)=>{
 
 const CancelJoinRequest=async(req,res)=>{
     try{
-        const {userId}= req.userId
+        const userId= req.userId
         const {userToCancel} = req.body
         const {groupId} =req.params
         
