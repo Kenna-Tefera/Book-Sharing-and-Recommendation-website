@@ -191,8 +191,9 @@ const UnFollow=async(req,res)=>{
      if(!userToUnfollow) return res.status(400).json('this user with this id not found')  
       
     if(userToUnfollow.follower.includes(unfollowerId)){
+        console.log(unfollower)
         userToUnfollow.follower=  userToUnfollow.follower.filter((e)=>e.toString() !==unfollowerId)
-        unfollower.following==unfollower.following((e)=>e.toString() !==userIdToUnfollow)
+        unfollower.following = unfollower.following.filter((e)=>e.toString() !==userIdToUnfollow)
 
         await userToUnfollow.save()
         await unfollower.save()
