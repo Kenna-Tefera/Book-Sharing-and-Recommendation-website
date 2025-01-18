@@ -93,7 +93,7 @@ const AddComment=async(req,res)=>{
 const LikeBook=async(req,res)=>{
     try{
         const {bookId }=req.params
-        const {liker}= req.body
+        const liker= req.userId
         const book= await Book.findById(bookId)
         if(!book) return res.status(400).json('book with this id not found')
         if(book.likes.includes(liker)) return res.status(400).json('User already liked this book');
@@ -154,7 +154,8 @@ const FilterBooksByGenre= async (req, res) => {
 
 const RateBook=async(req,res)=>{
     try{
-       const {userId,newStar}=req.body
+       const {newStar}=req.body
+       const userId=req.userId
        const {bookId}=req.params
        const user= await User.findById(userId)
        if(!user) return  res.status(400).json('the rater not found in user list')

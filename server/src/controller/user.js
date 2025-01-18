@@ -69,7 +69,7 @@ const UpdateProfile= async(req,res)=>{
         const inputs= req.body
         const userId= req.params.userId
         const user= await User.findById(userId)
-        if(!user) return res.status(400).json('user with tis id not found')
+        if(!user) return res.status(400).json('user with this id not found')
         const updatedUser= await User.findByIdAndUpdate(userId,inputs,{new:true})  
         if(!updatedUser) return res.status(400).json('failed to update user') 
         res.status(200).json(updatedUser)
