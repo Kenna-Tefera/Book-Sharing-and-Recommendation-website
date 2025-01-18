@@ -81,8 +81,106 @@ const DeleteGroup=async(req,res)=>{
 
 }
 
+const AddMember=async(req,res)=>{
+      try{
+        const {groupId}= req.params
+        const userId = req.userId
+        const {newMember} = req.body
+        const group= await Group.findById(groupId)
+        const user= await User.findById(newMember)
+
+        if(!group)  return res.status(400).json('group not found')
+        if(!user)  return res.status(400).json('member not found in user list of the web')
+
+        if(!(group.creator === userId))  return res.status(400).json('you can only add member to the group you created')
+        const alreadyExist= group.members.findIndex((e)=>e.toString()===newMember)
+        if(alreadyExist !== -1) {
+             return res.status(400).json('already member')
+          }else{
+            group.members.push(newMember)
+            
+            if(group.join_requests.includes(newMember)){
+                group.join_requests=  group.join_requests.filter((e)=>e.toString() !== newMember )
+            }
+            user.group.push(groupId)
+            await group.save()
+            await user.save()
+
+          }
+          res.status(200).json(group)
+
+      }catch(err){
+        res.status(500).json(err.message)
+
+      }
+}
+
+const RemoveMember=async(req,res)=>{
+    try{
+      const {groupId}= req.params
+      const userId = req.userId
+      const {memberToRemove} = req.body
+      
+      const group= await Group.findById(groupId)
+      const user= await User.findById(memberToRemove)
+
+      if(!group)  return res.status(400).json('group not found')
+      if(!user)  return res.status(400).json('member not found in user list of the web')
+
+      if(!(group.creator === userId))  return res.status(400).json('you can only remove member from the group you created')
+      const isExist= group.members.findIndex((e)=>e.toString()===memberToRemove)
+      if(isExist === -1) {
+           return res.status(400).json(' member to remove not already member')
+        }else{
+          group.members = group.members.filter((e)=>e.toString() !== memberToRemove)
+        // const  updatedMembers= await Group.findByIdAndUpdate(groupId, {members:newMembers},{new:true})
+        user.group = user.group.filter((e)=>e.toString() !== groupId)
+        //  const updatedGroups= await User.findByIdAndUpdate(memberToRemove, {groups:newGroups},{new:true})
+        await group.save()
+        await user.save()
+         res.status(200).json(updatedMembers)
+
+        }
+    }catch(err){
+      res.status(500).json(err.message)
+
+    }
+}
+
+const SendJoinRequest=async(req,res)=>{
+
+    try{
+         
+        const {groupId}= req.params
+        const userId = req.userId
+        const {memberToJoin} = req.body
+
+        const group= await Group.findById(groupId)
+        const user= await User.findById(memberToJoin)
+  
+        if(!group)  return res.status(400).json('group not found')
+        if(!user)  return res.status(400).json('member not found in user list of the web')
+
+        
+        const alreadyExist= group.members.findIndex((e)=>e.toString()===newMember)
+        if(alreadyExist !== -1) {
+             return res.status(400).json('you are already member')
+          }else{
+            group.join_requests.push(newMember)
+            await group.save()
+
+          }
+          res.status(200).json(group)
+
+            
+    }catch(err){
+        res.status(500).json(err.message)
+ 
+    }
+}
+
+//guys to accept the join request of group just use addMember api with id of join request sender
 
 
 
-
-module.exports= {CreateGroup,GetAllGroup,GetOneGroup,UpdateGroup,DeleteGroup}
+module.exports= {CreateGroup,GetAllGroup,GetOneGroup,UpdateGroup,DeleteGroup,AddMember,RemoveMember,SendJoinRequest}

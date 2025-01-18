@@ -19,6 +19,11 @@ const groupSchema= new mongoose.Schema({
         ref:'User',
         default:[]
     }],
+    join_requests:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User'
+    }],
+
     chats:[{
         texter:{type:mongoose.Schema.Types.ObjectId,ref:'User'},
         text:{type:String}
