@@ -33,7 +33,7 @@ const GetAllGroup=async(req,res)=>{
 const GetOneGroup=async(req,res)=>{
     try{
         const {groupId}= req.params
-        const group= await Group.findById(groupId)
+        const group= await Group.findById(groupId).populate('join_requests','email fullname').populate('members','email fullname')
         if(!group) return res.status(400).json('failed to fetch')
         res.status(200).json(group)   
 
@@ -105,9 +105,10 @@ const AddMember=async(req,res)=>{
             user.group.push(groupId)
             await group.save()
             await user.save()
+           
+            res.status(200).json(group)
 
           }
-          res.status(200).json(group)
 
       }catch(err){
         res.status(500).json(err.message)
@@ -168,9 +169,10 @@ const SendJoinRequest=async(req,res)=>{
           }else{
             group.join_requests.push(newMember)
             await group.save()
+            res.status(200).json(group)
+
 
           }
-          res.status(200).json(group)
 
             
     }catch(err){
@@ -179,8 +181,32 @@ const SendJoinRequest=async(req,res)=>{
     }
 }
 
+const CancelJoinRequest=async(req,res)=>{
+    try{
+        const {userId}= req.userId
+        const {userToCancel} = req.body
+        const {groupId} =req.params
+        
+        const group = await Group.findById(groupId)
+        if(!group)  return res.status(400).json('group not found')
+        
+        if((userId === group.creator) || (userId === userToCancel)){
+             group.join_requests=group.join_requests.filter((e)=>e.toString() !== userToCancel)
+             await  group.save()
+             res.status(200).json(group)
+            }else{
+                return res.status(400).json('u cant cancel others join request')
+            }
+    }catch(err){
+        res.status(500).json(err.message)
+
+    }
+}
+
+
+
 //guys to accept the join request of group just use addMember api with id of join request sender
 
 
 
-module.exports= {CreateGroup,GetAllGroup,GetOneGroup,UpdateGroup,DeleteGroup,AddMember,RemoveMember,SendJoinRequest}
+module.exports= {CreateGroup,GetAllGroup,GetOneGroup,UpdateGroup,DeleteGroup,AddMember,RemoveMember,SendJoinRequest,CancelJoinRequest}
