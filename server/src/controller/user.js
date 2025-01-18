@@ -181,24 +181,24 @@ const Follow=async(req,res)=>{
 const UnFollow=async(req,res)=>{
     try{
 
-     const {unfollower}=req.body
-     const {userIdToUnfollow}=req.body
+     const unfollowerId=req.userId
+     const userIdToUnfollow=req.params.userId
 
-     const user= await User.findById(userId)
+     const unfollower= await User.findById(unfollowerId)
      const userToUnfollow= await User.findById(userIdToUnfollow)
      
-     if(!user) return res.status(400).json('user with this id not found')
-     if(!userToUnfollow) return res.status(400).json('this follower with this id not found')  
+     if(!unfollower) return res.status(400).json('unfollower with this id not found')
+     if(!userToUnfollow) return res.status(400).json('this user with this id not found')  
       
-    if(userToUnfollow.follower.includes(userId)){
-        userToUnfollow.follower=  userToUnfollow.follower.filter((e)=>e.toString() !==userId)
-        user.following==user.following((e)=>e.toString() !==userIdToUnfollow)
+    if(userToUnfollow.follower.includes(unfollowerId)){
+        userToUnfollow.follower=  userToUnfollow.follower.filter((e)=>e.toString() !==unfollowerId)
+        unfollower.following==unfollower.following((e)=>e.toString() !==userIdToUnfollow)
 
         await userToUnfollow.save()
-        await user.save()
+        await unfollower.save()
         res.status(200).json(userToUnfollow)
     }else{
-        res.status(400).json(' the unfollwer id not in list of follower')
+        res.status(400).json(' the unfollower id not in list of follower')
 
     }    
 

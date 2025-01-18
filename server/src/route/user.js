@@ -13,8 +13,8 @@ router.put('/updateProfile/:userId',auth,UpdateProfile)
 router.delete('/deleteProfile/:userId',auth,DeleteProfile)
 router.post('/require-reset',requireResetPassword)
 router.post('/reset-password/:token',resetPassword)
-router.post('/:userId/follow',Follow)
-router.post('/:userId/unfollow',UnFollow)
+router.post('/:userId/follow',auth,Follow)
+router.post('/:userId/unfollow',auth,UnFollow)
 
 
 
