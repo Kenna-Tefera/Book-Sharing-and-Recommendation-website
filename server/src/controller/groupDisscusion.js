@@ -1,6 +1,7 @@
 const Group= require('../model/group')
 const User=require('../model/user')
 
+
 const CreateGroup=async(req,res)=>{
     try{
         const {name,username,description}= req.body
@@ -13,12 +14,14 @@ const CreateGroup=async(req,res)=>{
         const group=  await Group.create({name,username, description, creator:userId,members:[userId]})
          if(!group) return res.status(400).json('failed to create the group')
          await User.findByIdAndUpdate(userId, { $push: { group: group._id } });
-   
+    
          res.status(200).json(group)
     }catch(err){
         res.status(500).json(err.message)
     }
 }
+
+
 
 const GetAllGroup=async(req,res)=>{
     try{
@@ -81,9 +84,10 @@ const DeleteGroup=async(req,res)=>{
 
 }
 
+
 const AddMember=async(req,res)=>{
       try{
-        const {groupId}= req.params
+        const { groupId }= req.params
         const userId = req.userId
         const {newMember} = req.body
         const group= await Group.findById(groupId)
@@ -92,13 +96,12 @@ const AddMember=async(req,res)=>{
         if(!group)  return res.status(400).json('group not found')
         if(!user)  return res.status(400).json('member not found in user list of the web')
 
-        if(!(group.creator === userId))  return res.status(400).json('you can only add member to the group you created')
+        if((group.creator !== userId))  return res.status(400).json('you can only add member to the group you created')
         const alreadyExist= group.members.findIndex((e)=>e.toString()===newMember)
         if(alreadyExist !== -1) {
              return res.status(400).json('already member')
           }else{
-            group.members.push(newMember)
-            
+            group.members.push(newMember)   
             if(group.join_requests.includes(newMember)){
                 group.join_requests=  group.join_requests.filter((e)=>e.toString() !== newMember )
             }
