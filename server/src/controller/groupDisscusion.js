@@ -131,7 +131,7 @@ const RemoveMember=async(req,res)=>{
       if(!group)  return res.status(400).json('group not found')
       if(!user)  return res.status(400).json('member not found in user list of the web')
 
-      if(!(group.creator === userId))  return res.status(400).json('you can only remove member from the group you created')
+      if(group.creator !== userId)  return res.status(400).json('you can only remove member from the group you created')
       const isExist= group.members.findIndex((e)=>e.toString()===memberToRemove)
       if(isExist === -1) {
            return res.status(400).json(' member to remove not already member')
@@ -142,7 +142,7 @@ const RemoveMember=async(req,res)=>{
         //  const updatedGroups= await User.findByIdAndUpdate(memberToRemove, {groups:newGroups},{new:true})
         await group.save()
         await user.save()
-         res.status(200).json(updatedMembers)
+        res.status(200).json(group)
 
         }
     }catch(err){
