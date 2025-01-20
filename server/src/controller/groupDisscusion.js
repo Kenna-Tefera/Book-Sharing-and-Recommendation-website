@@ -178,6 +178,7 @@ const SendJoinRequest=async(req,res)=>{
     }
 }
 
+
 const CancelJoinRequest=async(req,res)=>{
     try{
         const userId= req.userId
@@ -199,6 +200,8 @@ const CancelJoinRequest=async(req,res)=>{
 
     }
 }
+
+
 
 const LeaveGroup=async(req,res)=>{
     try{
