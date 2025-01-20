@@ -36,7 +36,7 @@ const GetAllGroup=async(req,res)=>{
 const GetOneGroup=async(req,res)=>{
     try{
         const {groupId}= req.params
-        const group= await Group.findById(groupId).populate('join_requests','email fullname').populate('members','email fullname')
+        const group= await Group.findById(groupId).populate('join_requests','email fullname').populate('members','email fullname').populate('chats.texter','fullname profile_picture')
         if(!group) return res.status(400).json('failed to fetch')
         res.status(200).json(group)   
 
@@ -150,6 +150,7 @@ const RemoveMember=async(req,res)=>{
 
     }
 }
+
 
 const SendJoinRequest=async(req,res)=>{
 
