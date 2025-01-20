@@ -156,9 +156,7 @@ const SendJoinRequest=async(req,res)=>{
     try{
          
         const {groupId}= req.params
-        // const userId = req.userId
         const memberToJoin = req.userId
-
         const group= await Group.findById(groupId)
         const user= await User.findById(memberToJoin)
   
@@ -166,17 +164,13 @@ const SendJoinRequest=async(req,res)=>{
         if(!user)  return res.status(400).json('member not found in user list of the web')
 
         
-        const alreadyExist= group.members.findIndex((e)=>e.toString()===newMember)
-        if(alreadyExist !== -1) {
-             return res.status(400).json('you are already member')
-          }else{
-            group.join_requests.push(newMember)
+        const alreadyExist= group.members.findIndex((e)=>e.toString()===memberToJoin)
+           if(alreadyExist !== -1) return res.status(400).json('you are already member')
+          
+            group.join_requests.push(memberToJoin)
             await group.save()
             res.status(200).json(group)
-
-
-          }
-
+          
             
     }catch(err){
         res.status(500).json(err.message)
