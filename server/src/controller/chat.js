@@ -10,11 +10,11 @@ const WriteChat=async(req,res)=>{
         const {text}= req.body
 
         const group= await Group.findById(groupId)
-        const user= await User.findById(userId)
         if(!group) return res.status(400).json('group not found')
+        const user= await User.findById(userId)
         if(!user) return res.status(400).json('user not found')
 
-        if(!(group.members.includes(userId)))  return res.status(400).json('cnat write text if you u are not member')  
+        if(!(group.members.includes(userId)))  return res.status(400).json('can not write text if you u are not member')  
         group.chats.push({text:text, texter:userId})
         await group.save()
         res.status(200).json(group)
@@ -24,11 +24,27 @@ const WriteChat=async(req,res)=>{
 
 }
 
-const DeleteMyChat=()=>{
+const EditMyChat=async(req,res)=>{
     try{
-        const {groupId}= req.res
+        const {groupId}= req.params
         const userId= req.userId
-        
+        const {chatId, editedText}=req.body
+
+        const group= await Group.findById(groupId)
+        if(!group) return res.status(400).json('group not found')
+
+        const user= await User.findById(userId)
+        if(!user) return res.status(400).json('user not found')
+
+        const chat= group.chats.id(chatId)
+        if (!chat) return res.status(404).json('Chat not found');
+         
+        if(chat.texter.toString() !== userId) return res.status(400).json('You can only update your own chat');
+        chat.text=editedText
+
+        await group.save();
+
+        res.status(200).json(group);
     }catch(err){
         res.status(500).json(err.message)
 
@@ -38,4 +54,4 @@ const DeleteMyChat=()=>{
 
 
 
-module.exports={WriteChat}
+module.exports={WriteChat,EditMyChat}
