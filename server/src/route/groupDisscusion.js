@@ -15,6 +15,7 @@ router.post('/:groupId/addmember',auth,AddMember)
 router.post('/:groupId/removemember',auth,RemoveMember)
 router.post('/:groupId/sendjoinrequest',auth,SendJoinRequest)
 router.post('/:groupId/canceljoinrequest',auth,CancelJoinRequest)
+router.post('/:groupId/leavegroup',auth,LeaveGroup)
 
 
 module.exports= router

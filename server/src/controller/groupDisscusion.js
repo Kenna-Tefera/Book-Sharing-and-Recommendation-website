@@ -205,7 +205,23 @@ const CancelJoinRequest=async(req,res)=>{
 
 const LeaveGroup=async(req,res)=>{
     try{
+        const userId=req.userId
+        const {groupId}= req.params
 
+        const group= await Group.findById(groupId)
+        const user= await User.findById(userId)
+
+        if(!group)  return res.status(400).json('group not found')
+        if(!user)  return res.status(400).json('member not found in user list of the web')
+        
+
+        if(!(group.members.includes(userId))) return res.status(400).json('you are not member ')
+        group.members=group.members.filter((e)=>e.toString()!==userId )  
+        user.group=user.group.filter((e)=>e.toString() !== groupId)  
+
+        await group.save()
+        await user.save()
+        res.status(200).json({msg:"you leave the group",group})
     }catch(err){
         res.status(500).json(err.message)
 
