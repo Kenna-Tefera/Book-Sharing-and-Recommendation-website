@@ -6,13 +6,13 @@ import axios from 'axios';
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    fullName: '',
+    fullname: '',
     email: '',
     password: '',
   });
 
   const [errors, setErrors] = useState({
-    fullName: '',
+    fullname: '',
     email: '',
     password: '',
   });
@@ -57,7 +57,7 @@ const Signup = () => {
   const validate = () => {
     let formErrors = {};
 
-    if (!formData.fullName) formErrors.fullName = 'Full name is required';
+    if (!formData.fullname) formErrors.fullname = 'Full name is required';
     if (!formData.email) formErrors.email = 'Email is required';
     else if (!validateEmail(formData.email)) formErrors.email = 'Email is invalid';
     if (!formData.password) formErrors.password = 'Password is required';
@@ -98,18 +98,18 @@ const Signup = () => {
         <div className="w-full">
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label htmlFor="fullName" className="block text-gray-400 text-sm font-bold mb-2">
+              <label htmlFor="fullname" className="block text-gray-400 text-sm font-bold mb-2">
                 Full Name <span className="text-red-500">*</span>
               </label>
               <input
                 className="appearance-none border border-gray-300 rounded-md w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="fullName"
+                id="fullname"
                 type="text"
                 placeholder="John Doe"
-                value={formData.fullName}
+                value={formData.fullname}
                 onChange={handleChange}
               />
-              {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
+              {errors.fullname && <p className="text-red-500 text-xs mt-1">{errors.fullname}</p>}
             </div>
 
             <div className="mb-4">

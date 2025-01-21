@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import { useAuth } from '../context/Authcontext';
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -12,6 +12,7 @@ const Login = () => {
   const [isChecked, setIsChecked] = useState(false); 
   const [showPassword, setShowPassword] = useState(false); 
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useAuth();
   const [errors, setErrors] = useState({
     email: '',
     password: '',
@@ -54,8 +55,9 @@ const Login = () => {
       console.log("response", response.data)
       if (response.data.msg === "logedIn") {
         localStorage.setItem('token', response.data.token);
+        setIsLoggedIn(true);
         alert('Login Successful!');
-        navigate('/');
+        navigate("/home");
         
       } else {
         alert('Login failed: ' + response.data.msg);
@@ -71,8 +73,8 @@ const Login = () => {
 
   return (
     <div className="h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg p-6 max-w-sm w-full">
-        <h2 className="text-2xl font-bold mb-4">Login</h2>
+      <div className="bg-white shadow-lg rounded-lg p-6 max-w-md w-full">
+        <h2 className="text-2xl  font-medium mb-6 text-center text-blue-600">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -140,9 +142,9 @@ const Login = () => {
           </Link>
         </div>
         <div className="mt-2 text-center">
-          <p className="text-sm">
+          <p className="">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-blue-500 hover:underline">
+            <Link to="/signup" className="text-[#FD7606] underline">
               Sign up
             </Link>
           </p>

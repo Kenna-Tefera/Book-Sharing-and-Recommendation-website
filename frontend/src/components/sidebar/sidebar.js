@@ -16,13 +16,13 @@ const Sidebar = () => {
     { label: 'Categories', icon: '📂', link: '/categories' },
     { label: 'Favorites', icon: '❤️', link: '/profile/favorites' },
     { label: 'Settings', icon: '⚙️', link: '/settings' },
-    { label: 'Profile', icon: '👤', link: '/profile' },
+    { label: 'AllUser', icon: '👤', link: '/allprofiles' },
     { label: 'create new group', icon: '👤👤', link: '/CreateGroupPage' },
 
   ];
 
   return (
-    <div className={`h-screen bg-black text-white transition-all ${isSidebarOpen ? 'w-100' : 'w-100'}`}>
+    <div className={`min-h-screen bg-black text-white transition-all ${isSidebarOpen ? 'w-100' : 'w-100'}`}>
       {/* Hamburger Button */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}

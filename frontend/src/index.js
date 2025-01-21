@@ -2,14 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import Footer from './components/shared/footer';
 // import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
-import Navbar from './components/shared/navbar';
+import { AuthProvider } from './context/Authcontext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </React.StrictMode>
 );
 
