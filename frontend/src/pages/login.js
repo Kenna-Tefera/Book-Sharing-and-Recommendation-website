@@ -1,16 +1,16 @@
-
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../context/Authcontext';
+import { loginUser } from '../api';
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-  const [isChecked, setIsChecked] = useState(false); 
-  const [showPassword, setShowPassword] = useState(false); 
+  const [error, setError] = useState('');
+  const [isChecked, setIsChecked] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { setIsLoggedIn } = useAuth();
   const [errors, setErrors] = useState({
@@ -51,20 +51,17 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/user/login', formData);
-      console.log("response", response.data)
-      if (response.data.msg === "logedIn") {
-        localStorage.setItem('token', response.data.token);
+      const response = await loginUser(formData.email, formData.password);
+      if (response.msg === "loggedIn") {
+        localStorage.setItem('token', response.token);
         setIsLoggedIn(true);
-        alert('Login Successful!');
-        navigate("/home");
-        
+        navigate('/home', { replace: true });
       } else {
-        alert('Login failed: ' + response.data.msg);
+        setError('Login failed: ' + response.msg);
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      alert('An error occurred while logging in. Please try again.');
+      setError('An error occurred while logging in. Please try again.');
     }
   };
 
@@ -74,7 +71,8 @@ const Login = () => {
   return (
     <div className="h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-6 max-w-md w-full">
-        <h2 className="text-2xl  font-medium mb-6 text-center text-blue-600">Login</h2>
+        <h2 className="text-2xl font-medium mb-6 text-center text-blue-600">Login</h2>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -155,3 +153,5 @@ const Login = () => {
 };
 
 export default Login;
+
+

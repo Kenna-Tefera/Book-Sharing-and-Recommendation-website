@@ -94,6 +94,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.svg'; 
 import { useAuth } from '../../context/Authcontext';
 import { jwtDecode } from 'jwt-decode';
+// import NotificationsIcon from '@mui/icons-material/Notifications';
+// import PersonIcon from '@mui/icons-material/Person';
 
 const Navbar = ( ) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -182,6 +184,15 @@ const Navbar = ( ) => {
         </button>
 
 
+        {/* Notification and Profile Icons */}
+        {/* <div className="flex items-center space-x-4">
+          <NotificationsIcon className="text-white" />
+          <Link to="/profile" className="text-white hover:text-gray-300">
+            <PersonIcon />
+          </Link>
+        </div> */}
+
+        {/* Mobile Menu */}
         <div className={`${isOpen ? 'block' : 'hidden'} md:hidden`}>
           <div className="flex flex-col space-y-4 p-4 bg-black">
             <Link to="/home" className="text-white hover:text-gray-300">
@@ -212,3 +223,4 @@ const Navbar = ( ) => {
 };
 
 export default Navbar;
+

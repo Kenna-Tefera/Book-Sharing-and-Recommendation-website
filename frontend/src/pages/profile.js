@@ -1,15 +1,14 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate , to, Link} from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import Sidebar from '../components/sidebar/sidebar';
 import axiosInstance from '../axosinstance';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 const Profile = () => {
   const [user, setUser] = useState({});
   const [isFollowing, setIsFollowing] = useState(false);
-  const [message, setMessage] = useState('');
   const [userDeleted, setUserDeleted] = useState(false);
   const { userId } = useParams();
   const navigate = useNavigate();
@@ -30,7 +29,7 @@ const Profile = () => {
     };
 
     fetchUserData();
-  }, [userId]);
+  }, [userId, loggedInUserId]);
 
 
 
@@ -117,7 +116,6 @@ const Profile = () => {
       navigate('/login');
     } catch (error) {
       console.error('Error deleting profile:', error);
-      setMessage(error.response?.data || 'Failed to delete profile');
     }
   };
 
@@ -189,7 +187,7 @@ const Profile = () => {
 
         {loggedInUserId === userId && (
           <div className="flex justify-between mt-6">
-            <Link  to={`/editprofile/${userId}`}>
+            <Link to={`/editprofile/${userId}`}>
               <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
                 Edit Profile
               </button>
@@ -209,3 +207,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

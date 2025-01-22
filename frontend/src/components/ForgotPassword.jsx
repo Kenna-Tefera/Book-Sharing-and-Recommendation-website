@@ -1,18 +1,31 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { API_BASE_URL } from '../api';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email) {
-      alert('Please provide your email address!');
+      setError('Please provide your email address!');
       return;
     }
 
-    console.log('Password reset requested for email:', email);
-    alert('If this email is registered, a password reset link will be sent to it.');
+    try {
+      const response = await axios.post(`${API_BASE_URL}/forgotpassword`, { email });
+      if (response.data.success) {
+        setSuccess(true);
+        setError(null);
+      } else {
+        setError("Error sending reset password email: " + response.data.message);
+      }
+    } catch (error) {
+      setError("Error sending reset password email: " + error.message);
+    }
   };
 
   return (
@@ -53,6 +66,13 @@ const ForgotPassword = () => {
                   Send Reset Link
                 </button>
               </div>
+
+              {error && <p className="text-center text-red-600 mt-4">{error}</p>}
+              {success && (
+                <p className="text-center text-green-600 mt-4">
+                  A password reset link has been sent to your email address.
+                </p>
+              )}
             </form>
 
             <div className="text-center text-gray-500 mt-4">
@@ -71,3 +91,4 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
+

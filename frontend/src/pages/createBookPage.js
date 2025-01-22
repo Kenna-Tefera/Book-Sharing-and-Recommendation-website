@@ -1,7 +1,49 @@
-import React, { useState } from 'react';
-import Sidebar from '../components/sidebar/sidebar'; // Import Sidebar component
+// c:/Users/FALCON DUBAI/Desktop/Book-Sharing-and-Recommendation-website/frontend/src/pages/createBookPage.js
 
+import React, { useState } from 'react';
+import axios from 'axios';
+import Sidebar from '../components/sidebar/sidebar'
 const CreateBookPage = () => {
+  const [bookData, setBookData] = useState({
+    title: '',
+    author: '',
+    genre: '',
+    description: '',
+    file: null,
+  });
+
+  const handleInputChange = (e) => {
+    setBookData({ ...bookData, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e) => {
+    setBookData({ ...bookData, file: e.target.files[0] });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData();
+    formData.append('title', bookData.title);
+    formData.append('author', bookData.author);
+    formData.append('genre', bookData.genre);
+    formData.append('description', bookData.description);
+    formData.append('file', bookData.file);
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/book', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Book created successfully:', response.data);
+      // Reset form or redirect to book list page
+    } catch (error) {
+      console.error('Error creating book:', error);
+    }
+  };
+
+ 
   const [formData, setFormData] = useState({
     title: '',
     author: '',
@@ -21,27 +63,9 @@ const CreateBookPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!formData.title || !formData.author || !formData.genre || !formData.description) {
-      alert('Please fill in all the fields!');
-      return;
-    }
-
-    if (!isChecked) {
-      alert('Please agree to the Terms and Conditions!');
-      return;
-    }
-
-    if (!formData.file) {
-      alert('Please upload a file!');
-      return;
-    }
-
-    console.log('Book submitted:', formData);
-    // You can now process the file upload here
-  };
+  
+  
+  
 
   return (
     <div className="flex h-screen">

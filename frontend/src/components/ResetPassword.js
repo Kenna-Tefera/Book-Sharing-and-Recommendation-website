@@ -1,32 +1,37 @@
 
 import React, { useState } from "react";
 
+import { resetPassword } from '../api';
+
 const ResetPassword = () => {
   const [formValues, setFormValues] = useState({
     newPassword: "",
     confirmPassword: "",
   });
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [id]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const { newPassword, confirmPassword } = formValues;
+    const token = props.match.params.token; // Get the token from the URL
 
     if (newPassword === confirmPassword) {
-      alert("Password reset successful!");
+      try {
+        const response = await resetPassword(token, newPassword);
+        if (response.success) {
+          alert("Password reset successful!");
+        } else {
+          alert("Error resetting password: " + response.message);
+        }
+      } catch (error) {
+        alert("Error resetting password: " + error.message);
+      }
     } else {
       alert("Passwords do not match. Please try again.");
     }
   };
 
+ 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg">
