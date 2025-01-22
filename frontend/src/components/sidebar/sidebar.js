@@ -13,16 +13,16 @@ const Sidebar = () => {
   // Menu items for the sidebar
   const menuItems = [
     { label: 'Home', icon: '🏠', link: '/' },
-    { label: 'Categories', icon: '📂', link: '/categories' },
+    // { label: 'Categories', icon: '📂', link: '/categories' },
     { label: 'Favorites', icon: '❤️', link: '/profile/favorites' },
     { label: 'Settings', icon: '⚙️', link: '/settings' },
-    { label: 'AllUser', icon: '👤', link: '/allprofiles' },
+    { label: 'Profile', icon: '👤', link: '/profile' },
     { label: 'create new group', icon: '👤👤', link: '/CreateGroupPage' },
 
   ];
 
   return (
-    <div className={`min-h-screen bg-black text-white transition-all ${isSidebarOpen ? 'w-100' : 'w-100'}`}>
+    <div className={`h-screen bg-black text-white transition-all ${isSidebarOpen ? 'w-100' : 'w-100'}`}>
       {/* Hamburger Button */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -101,7 +101,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <Link
-                    to="/my-books"
+                    to="/BookListPage"
                     className="flex items-center px-4 py-2 hover:bg-gray-600 transition-all"
                   >
                     My Books
