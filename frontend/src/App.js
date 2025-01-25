@@ -27,7 +27,7 @@ const ProtectedRoute = ({ element }) => {
 };
 
 const App = () => {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -40,25 +40,25 @@ const App = () => {
 
   const handleLogin = () => {
     setIsAuthenticated(true);
+    setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsAuthenticated(false);
+    setIsLoggedIn(false);
   };
 
   const checkTokenExpiration = () => {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
         if (decoded.exp < Date.now() / 1000) {
           handleLogout();
-          localStorage.removeItem("authToken");
         }
       } catch (error) {
         handleLogout();
-        localStorage.removeItem("authToken");
       }
     }
     setTimeout(checkTokenExpiration, 1000);
@@ -66,7 +66,7 @@ const App = () => {
 
   return (
     <Router>
-      {isLoggedIn && <Navbar />}
+      {isAuthenticated && <Navbar />}
       <ErrorBoundary>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -90,7 +90,7 @@ const App = () => {
           <Route path="*" element={<Error404 />} /> {/* Catch-all for undefined routes */}
         </Routes>
       </ErrorBoundary>
-      {isLoggedIn && <Footer />}
+      {isAuthenticated && <Footer />}
     </Router>
   );
 };
